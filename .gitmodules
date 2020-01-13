@@ -1,0 +1,15 @@
+[submodule "submodules/pms5003-circuitpython"]
+	path = submodules/pms5003-circuitpython
+	url = https://github.com/pimoroni/pms5003-circuitpython
+[submodule "submodules/circuitpython_adapter"]
+	path = submodules/circuitpython_adapter
+	url = https://github.com/pimoroni//circuitpython_adapter
+[submodule "submodules/physical_feather_pins"]
+	path = submodules/physical_feather_pins
+	url = https://github.com/pimoroni/physical_feather_pins
+[submodule "submodules/ltr559-python"]
+	path = submodules/ltr559-python
+	url = https://github.com/pimoroni/ltr559-python
+[submodule "submodules/i2cdevice-python"]
+	path = submodules/i2cdevice-python
+	url = https://github.com/pimoroni/i2cdevice-python/
