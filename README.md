@@ -10,3 +10,8 @@ The following examples will not work on the M0 boards, this is due to their limi
 * `logger-bme280-example.py`
 * 
 * `test-all.py`
+
+## Downloading
+To clone the repository, please use `git clone` with the option `--recurse-submodules`, otherwise not all the libraries will be downloaded. Do not download the zip as this will not contain all the libraries either.
+
+Example: `git clone https://github.com/pimoroni/EnviroPlus-FeatherWing --recurse-submodules`
