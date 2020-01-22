@@ -4,17 +4,20 @@ import pimoroni_physical_feather_pins
 _is_setup = False
 
 class Mics6814Reading(object):
-    __slots__ = 'oxidising', 'reducing', 'nh3'
+    __slots__ = 'oxidising', 'reducing', 'nh3', "_OX", "_RED", "_NH3"
 
-    def __init__(self, ox, red, nh3):
+    def __init__(self, ox, red, nh3, OX, RED, NH3):
+        self._OX = OX
+        self._RED = RED
+        self._NH3 = NH3
         self.oxidising = ox
         self.reducing = red
         self.nh3 = nh3
 
     def __repr__(self):
-        fmt = """Oxidising: {ox:05.03f} Volts
-Reducing: {red:05.03f} Volts
-NH3: {nh3:05.03f} Volts"""
+        fmt = """Oxidising: {ox:05.03f} Ohms
+Reducing: {red:05.03f} Ohms
+NH3: {nh3:05.03f} Ohms"""
         return fmt.format(
             ox=self.oxidising,
             red=self.reducing,
@@ -52,21 +55,23 @@ def read_all():
     setup()
 
     try:
-        ox = OX.value * (OX.reference_voltage / 65535)
+        ox = 56000/((65535/OX.value)-1)
+        # Simplified from:
+        # ox = 56000 * (1/ (OX.reference_voltage/(OX.value * (OX.reference_voltage / 65535)) -1))
     except ZeroDivisionError:
         ox = 0
 
     try:
-        red = RED.value * (RED.reference_voltage / 65535)
+        red = 56000/((65535/RED.value)-1)
     except ZeroDivisionError:
         red = 0
 
     try:
-        nh3 = NH3.value * (NH3.reference_voltage / 65535)
+        nh3 = 56000/((65535/NH3.value)-1)
     except ZeroDivisionError:
         nh3 = 0
 
-    return Mics6814Reading(ox, red, nh3)
+    return Mics6814Reading(ox, red, nh3, OX, RED, NH3)
 
 
 def read_oxidising():
