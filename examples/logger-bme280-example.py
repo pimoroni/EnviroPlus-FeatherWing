@@ -38,10 +38,6 @@ slogger.group.append(label.Label(terminalio.FONT, text="%0.1f hPa" % bme280.pres
 slogger.group.append(label.Label(terminalio.FONT, text="%0.1f %%" % bme280.humidity, color=blue, x=120, y=5))
 #slogger.group.append(label.Label(terminalio.FONT, text="%0.2f m" % bme280.altitude, color=red+green+blue, x=40, y=20)) # uncomment for altitude estimation
 
-# define a remap function to scale a value from an old range to a new range, preserving ratio
-def remap(Value, OldMin,OldMax, NewMin, NewMax):
-    return (((Value - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-
 
 while True:
     # take readings
@@ -53,10 +49,10 @@ while True:
     # update the line graph
     slogger.update(
         # scale to 70 pixels max height to allow the labels to have dedicated screen space
-        remap(temperature, 0, 50, 0, 70),
-        remap(pressure, 975, 1025, 0, 70),
-        remap(humidity, 0, 100, 0, 70),
-        #remap(altitude, 0, 1000, 0, 70) # uncomment for altitude estimation
+        slogger.remap(temperature, 0, 50, 0, 70),
+        slogger.remap(pressure, 975, 1025, 0, 70),
+        slogger.remap(humidity, 0, 100, 0, 70),
+        #slogger.remap(altitude, 0, 1000, 0, 70) # uncomment for altitude estimation
     )
 
     # update the labels

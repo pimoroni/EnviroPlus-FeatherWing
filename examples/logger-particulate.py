@@ -43,10 +43,6 @@ for i in range(slogger.bitmap.width):
     slogger.bitmap[i, 39] = 4
 
 
-# define a remap function to scale a value from an old range to a new range, preserving ratio
-def remap(Value, OldMin,OldMax, NewMin, NewMax):
-    return (((Value - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
-
 while True:
     # take readings
     reading = pms5003.read()
@@ -56,9 +52,9 @@ while True:
 
     # update the line graph
     slogger.update(
-        remap(pm2, 0, 50, 0, 1000),
-        remap(pm10, 0, 100, 0, 1000),
-        #remap(pm1, 0, 100, 0, 1000) # uncomment to enable PM1.0 measuring
+        slogger.remap(pm2, 0, 50, 0, 1000),
+        slogger.remap(pm10, 0, 100, 0, 1000),
+        #slogger.remap(pm1, 0, 100, 0, 1000) # uncomment to enable PM1.0 measuring
     )
 
     # update the labels
