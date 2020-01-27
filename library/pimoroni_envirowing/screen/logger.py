@@ -10,31 +10,10 @@ class ScreenLogger:
 
         :param int min_value: the min value to show on the plotter (the bottom)
         """
-
-        #region Screen setup
-        """
-        This region of code is used to setup the envirowing screen with displayio
-        """
-
-        import board, time
-        import pimoroni_physical_feather_pins
         import displayio
-        from adafruit_st7735r import ST7735R
+        from pimoroni_envirowing import screen
 
-        self.spi = board.SPI() # define which spi bus the screen is on
-        self.spi.try_lock() # try to get control of the spi bus
-        self.spi.configure(baudrate=100000000) # tell the spi bus how fast it's going to run
-        # baudrate doesn't need to be this high in practice, it's just nice to have a quick screen refresh in this case
-        self.spi.unlock() # unlocks the spi bus so displayio can control it
-        #self.tft_dc = pimoroni_physical_feather_pins.pin19() # define which pin the command line is on
-        #self.tft_cs = pimoroni_physical_feather_pins.pin20() # define which pin the chip select line is on
-
-        displayio.release_displays() # release any displays that may exist from previous code run
-        self.display_bus = displayio.FourWire(self.spi, command=pimoroni_physical_feather_pins.pin19(), chip_select=pimoroni_physical_feather_pins.pin20(), reset=pimoroni_physical_feather_pins.pin21()) # define the display bus
-
-        self.display = ST7735R(self.display_bus, width=160, height=80, colstart=26, rowstart=1, rotation=270, invert=True)# define the display (these values are specific to the envirowing's screen)
-
-        #endregion Screen setup
+        self.display = screen.Screen()
 
         self.num_colours = len(colours) + 1
 
