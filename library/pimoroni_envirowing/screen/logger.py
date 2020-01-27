@@ -1,5 +1,5 @@
 class ScreenLogger:
-    def __init__(self, colours, bg_colour=None, max_value=None, min_value=None):
+    def __init__(self, colours, bg_colour=None, max_value=None, min_value=None, display=None):
         """__init__
 
         :param list colours: a list of colours to use for data lines
@@ -9,12 +9,17 @@ class ScreenLogger:
         :param int max_value: the max value to show on the plotter (the top)
 
         :param int min_value: the min value to show on the plotter (the bottom)
+
+        :param display: a supplied display object (creates one if not supplied)
         """
         import displayio
-        from pimoroni_envirowing import screen
 
-        self.display = screen.Screen()
+        if not display:
+            from pimoroni_envirowing import screen
 
+            self.display = screen.Screen()
+        else:
+            self.display = display
         self.num_colours = len(colours) + 1
 
         self.bitmap = displayio.Bitmap(160, 80, self.num_colours)
@@ -54,10 +59,12 @@ class ScreenLogger:
     def remap(self, Value, OldMin,OldMax, NewMin, NewMax):
         return (((Value - OldMin) * (NewMax - NewMin)) / (OldMax - OldMin)) + NewMin
     
-    def update(self, *values):
+    def update(self, *values, draw=True):
         """update
 
         :param *values: the values to send to the logger
+
+        :param bool draw: if set to false, will not draw the line graph, just update the data points
         """
         
         values = list(values)
@@ -82,17 +89,21 @@ class ScreenLogger:
         for index,value in enumerate(values):
             self.bitmap[(self.bitmap.width - 1),round(((value - self.min_value) / self.value_range) * self.bitmap.height)] = index + 1
         """
-
-        old_points = self.data_points
+        if not(len(self.data_points) > self.bitmap.width):
+            self.old_points = self.data_points
 
         self.data_points.append(values)
-
+        if draw:
+            self.draw()
+    
+    def draw(self):
         if len(self.data_points) > self.bitmap.width:
-            self.data_points = self.data_points[1:] # pop doesn't work in circuitpython
+            difflen = len(self.data_points) - self.bitmap.width
+            self.data_points = self.data_points[difflen:]
         
             difference = []
 
-            for i,j in zip(self.data_points, old_points):
+            for i,j in zip(self.data_points, self.old_points):
                 subarray = []
                 for value in zip(i,j):
                     subarray.append((value[0] - value[1]))
@@ -102,7 +113,7 @@ class ScreenLogger:
                 for subindex,point in enumerate(value):
                     if point != 0:
                         #self.bitmap[index,round(((old_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = 0
-                        self.bitmap[index,round(self.remap(old_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = 0
+                        self.bitmap[index,round(self.remap(self.old_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = 0
                         #self.bitmap[index,round(((self.data_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
                         self.bitmap[index,round(self.remap(self.data_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
         else:
@@ -110,3 +121,5 @@ class ScreenLogger:
             for subindex,point in enumerate(self.data_points[-1]):
                 #self.bitmap[(len(self.data_points) - 1),round(((point - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
                 self.bitmap[(len(self.data_points) - 1),round(self.remap(point, self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
+        
+        self.display.show(self.group)
