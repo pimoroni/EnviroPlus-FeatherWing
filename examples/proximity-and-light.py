@@ -25,7 +25,7 @@ try:
         prox = ltr559.get_proximity()
 
         # change screen brightness according to the amount of light detected
-        pwm.duty_cycle = int(min(remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
+        pwm.duty_cycle = int(min(remap(lux, 0, 400, 3, (2**16 - 1)), (2**16 - 1)))
 
         print("Lux: {:06.2f}, Proximity: {:04d}".format(lux, prox))
 
