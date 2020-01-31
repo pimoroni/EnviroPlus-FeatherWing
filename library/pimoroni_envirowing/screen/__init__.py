@@ -1,4 +1,4 @@
-def Screen(backlight_control=True, baudrate=100000000):
+def Screen(backlight_control=True, baudrate=100000000, spi=None):
     """__init__
     :param bool backlight_control: determines whether this class should handle the screen's backlight (default True)
     (this is useful to set to False if you want to control the brightness with pwm in your own code)
@@ -12,7 +12,10 @@ def Screen(backlight_control=True, baudrate=100000000):
     import displayio
     from adafruit_st7735r import ST7735R
 
-    spi = board.SPI() # define which spi bus the screen is on
+    # if not supplied an spi object, make our own
+    if not spi:
+        spi = board.SPI() # define which spi bus the screen is on
+    
     spi.try_lock() # try to get control of the spi bus
     spi.configure(baudrate=baudrate) # tell the spi bus how fast it's going to run
     spi.unlock() # unlocks the spi bus so displayio can control it
