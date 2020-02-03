@@ -83,7 +83,7 @@ while True:
         slogger.group[2] = label.Label(terminalio.FONT, text="Light: {:.0f}".format(lux), color=blue, x=80, y=5)
 
         # change screen brightness according to the amount of light detected
-        pwm.duty_cycle = int(min(slogger.remap(ltr559.get_lux(), 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
+        pwm.duty_cycle = int(min(slogger.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
 
         # reset the sound readings counters
         reading = 0
