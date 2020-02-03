@@ -96,30 +96,40 @@ class ScreenLogger:
         if draw:
             self.draw()
     
-    def draw(self):
-        if len(self.data_points) > self.bitmap.width:
-            difflen = len(self.data_points) - self.bitmap.width
-            self.data_points = self.data_points[difflen:]
-        
-            difference = []
-
-            for i,j in zip(self.data_points, self.old_points):
-                subarray = []
-                for value in zip(i,j):
-                    subarray.append((value[0] - value[1]))
-                difference.append(subarray)
-
-            for index,value in enumerate(difference):
-                for subindex,point in enumerate(value):
-                    if point != 0:
-                        #self.bitmap[index,round(((old_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = 0
-                        self.bitmap[index,round(self.remap(self.old_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = 0
-                        #self.bitmap[index,round(((self.data_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
-                        self.bitmap[index,round(self.remap(self.data_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
-        else:
+    def draw(self, full_refresh=False):
+        if not full_refresh:
+            if len(self.data_points) > self.bitmap.width:
+                difflen = len(self.data_points) - self.bitmap.width
+                self.data_points = self.data_points[difflen:]
             
-            for subindex,point in enumerate(self.data_points[-1]):
-                #self.bitmap[(len(self.data_points) - 1),round(((point - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
-                self.bitmap[(len(self.data_points) - 1),round(self.remap(point, self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
-        
+                difference = []
+
+                for i,j in zip(self.data_points, self.old_points):
+                    subarray = []
+                    for value in zip(i,j):
+                        subarray.append((value[0] - value[1]))
+                    difference.append(subarray)
+
+                for index,value in enumerate(difference):
+                    for subindex,point in enumerate(value):
+                        if point != 0:
+                            #self.bitmap[index,round(((old_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = 0
+                            self.bitmap[index,round(self.remap(self.old_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = 0
+                            #self.bitmap[index,round(((self.data_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
+                            self.bitmap[index,round(self.remap(self.data_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
+            else:
+                try:
+                    for subindex,point in enumerate(self.data_points[-1]):
+                        #self.bitmap[(len(self.data_points) - 1),round(((point - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
+                        self.bitmap[(len(self.data_points) - 1),round(self.remap(point, self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
+                except IndexError:
+                    print("You shouldn't call draw() without calling update() first")
+        else:
+            try:
+                for index,value in enumerate(self.data_points):
+                    for subindex,point in enumerate(value):
+                        #self.bitmap[(len(self.data_points) - 1),round(((point - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
+                        self.bitmap[index,round(self.remap(point, self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
+            except IndexError:
+                print("You shouldn't call draw() without calling update() first")
         self.display.show(self.group)
