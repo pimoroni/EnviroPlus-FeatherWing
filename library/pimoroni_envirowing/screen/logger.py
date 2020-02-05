@@ -93,6 +93,11 @@ class ScreenLogger:
             self.old_points = self.data_points
 
         self.data_points.append(values)
+
+        if len(self.data_points) > (self.bitmap.width + 1):
+            difflen = len(self.data_points) - (self.bitmap.width + 1)
+            self.data_points = self.data_points[difflen:]
+
         if draw:
             self.draw()
     
@@ -126,6 +131,10 @@ class ScreenLogger:
                     print("You shouldn't call draw() without calling update() first")
         else:
             try:
+                if len(self.data_points) > self.bitmap.width:
+                    difflen = len(self.data_points) - self.bitmap.width
+                    self.data_points = self.data_points[difflen:]
+                    
                 for index,value in enumerate(self.data_points):
                     for subindex,point in enumerate(value):
                         #self.bitmap[(len(self.data_points) - 1),round(((point - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
