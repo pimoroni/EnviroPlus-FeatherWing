@@ -33,10 +33,10 @@ bme280.sea_level_pressure = 1013.25
 slogger = logger.ScreenLogger([red, green, blue, red+green+blue], max_value=80, min_value=0)
 
 # add a colour coded text label for each reading
-slogger.group.append(label.Label(terminalio.FONT, text="%0.1f C" % bme280.temperature, color=red, x=0, y=5))
-slogger.group.append(label.Label(terminalio.FONT, text="%0.1f hPa" % bme280.pressure, color=green, x=50, y=5))
-slogger.group.append(label.Label(terminalio.FONT, text="%0.1f %%" % bme280.humidity, color=blue, x=120, y=5))
-#slogger.group.append(label.Label(terminalio.FONT, text="%0.2f m" % bme280.altitude, color=red+green+blue, x=40, y=20)) # uncomment for altitude estimation
+slogger.group.append(label.Label(terminalio.FONT, text="{:0.1f} C".format(bme280.temperature), color=red, x=0, y=5, max_glyphs=15))
+slogger.group.append(label.Label(terminalio.FONT, text="{:0.1f} hPa".format(bme280.pressure), color=green, x=50, y=5, max_glyphs=15))
+slogger.group.append(label.Label(terminalio.FONT, text="{:0.1f} %".format(bme280.humidity), color=blue, x=120, y=5, max_glyphs=15))
+#slogger.group.append(label.Label(terminalio.FONT, text="{:0.2f} m".format(bme280.altitude), color=red+green+blue, x=40, y=20, max_glyphs=15)) # uncomment for altitude estimation
 
 
 while True:
@@ -56,9 +56,9 @@ while True:
     )
 
     # update the labels
-    slogger.group[1] = (label.Label(terminalio.FONT, text="%0.1f C" % temperature, color=red, x=0, y=5))
-    slogger.group[2] = (label.Label(terminalio.FONT, text="%0.1f hPa" % pressure, color=green, x=50, y=5))
-    slogger.group[3] = (label.Label(terminalio.FONT, text="%0.1f %%" % humidity, color=blue, x=120, y=5))
-    #slogger.group[4] = (label.Label(terminalio.FONT, text="%0.2f m" % altitude, color=red+green+blue, x=40, y=20)) # uncomment for altitude estimation
+    slogger.group[1].text = "{:0.1f} C".format(temperature)
+    slogger.group[2].text = "{:0.1f} hPa".format(pressure)
+    slogger.group[3].text = "{:0.1f} %".format(humidity)
+    #slogger.group[4].text = "{:0.2f} m".format(altitude) # uncomment for altitude estimation
 
     time.sleep(interval)

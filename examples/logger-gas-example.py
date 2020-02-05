@@ -26,9 +26,9 @@ blue = 0x0000FF
 slogger = logger.ScreenLogger([red, green, blue], max_value=3.3, min_value=0.5)
 
 # add a colour coded text label for each reading
-slogger.group.append(label.Label(terminalio.FONT, text="OX: {:.0f}", color=red, x=0, y=5))
-slogger.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=80, y=5))
-slogger.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=0, y=20))
+slogger.group.append(label.Label(terminalio.FONT, text="OX: {:.0f}", color=red, x=0, y=5, max_glyphs=15))
+slogger.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=80, y=5, max_glyphs=15))
+slogger.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=0, y=20, max_glyphs=15))
 
 
 while True:
@@ -44,8 +44,8 @@ while True:
     )
 
     # update the labels
-    slogger.group[1] = label.Label(terminalio.FONT, text="OX: {:.0f}K".format(reading.oxidising/1000), color=red, x=0, y=5)
-    slogger.group[2] = label.Label(terminalio.FONT, text="RED: {:.0f}K".format(reading.reducing/1000), color=green, x=80, y=5)
-    slogger.group[3] = label.Label(terminalio.FONT, text="NH3: {:.0f}K".format(reading.nh3/1000), color=blue, x=0, y=20)
+    slogger.group[1].text = "OX: {:.0f}K".format(reading.oxidising/1000)
+    slogger.group[2].text = "RED: {:.0f}K".format(reading.reducing/1000)
+    slogger.group[3].text = "NH3: {:.0f}K".format(reading.nh3/1000)
     
     time.sleep(interval)

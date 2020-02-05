@@ -52,8 +52,8 @@ pwm.duty_cycle = 2**15
 slogger = logger.ScreenLogger([green, blue], display=screen, max_value=1)
 
 # add a colour coded text label for each reading
-slogger.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5))
-slogger.group.append(label.Label(terminalio.FONT, text="Light", color=blue, x=80, y=5))
+slogger.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5, max_glyphs=15))
+slogger.group.append(label.Label(terminalio.FONT, text="Light", color=blue, x=80, y=5, max_glyphs=15))
 
 # record the time that the sampling starts
 last_reading = time.monotonic()
@@ -79,8 +79,8 @@ while True:
         )
 
         # update the labels
-        slogger.group[1] = label.Label(terminalio.FONT, text="Sound: {:1.2f}".format(sound_level), color=green, x=0, y=5)
-        slogger.group[2] = label.Label(terminalio.FONT, text="Light: {:.0f}".format(lux), color=blue, x=80, y=5)
+        slogger.group[1].text = "Sound: {:1.2f}".format(sound_level)
+        slogger.group[2].text = "Light: {:.0f}".format(lux)
 
         # change screen brightness according to the amount of light detected
         pwm.duty_cycle = int(min(slogger.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))

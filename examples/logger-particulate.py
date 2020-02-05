@@ -34,9 +34,9 @@ pms5003 = PMS5003()
 slogger = logger.ScreenLogger([green, blue, red+blue+green, red], max_value=1000, min_value=0)
 
 # add a colour coded text label for each reading
-slogger.group.append(label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5))
-slogger.group.append(label.Label(terminalio.FONT, text="PM10: {:d}", color=blue, x=80, y=5))
-#slogger.group.append(label.Label(terminalio.FONT, text="PM1.0: {:d}", color=red, x=0, y=20)) # uncomment to enable PM1.0 measuring
+slogger.group.append(label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5, max_glyphs=15))
+slogger.group.append(label.Label(terminalio.FONT, text="PM10: {:d}", color=blue, x=80, y=5, max_glyphs=15))
+#slogger.group.append(label.Label(terminalio.FONT, text="PM1.0: {:d}", color=red, x=0, y=20, max_glyphs=15)) # uncomment to enable PM1.0 measuring
 
 # red line for the WHO guideline (https://en.wikipedia.org/wiki/Air_quality_guideline)
 for i in range(slogger.bitmap.width):
@@ -58,8 +58,8 @@ while True:
     )
 
     # update the labels
-    slogger.group[1] = label.Label(terminalio.FONT, text="PM2.5: {:d}".format(pm2), color=green, x=0, y=5)
-    slogger.group[2] = label.Label(terminalio.FONT, text="PM10: {:d}".format(pm10), color=blue, x=80, y=5)
-    #slogger.group[3] = label.Label(terminalio.FONT, text="PM1.0: {:d}".format(pm1), color=red, x=0, y=20)) # uncomment to enable PM1.0 measuring
+    slogger.group[1].text = "PM2.5: {:d}".format(pm2)
+    slogger.group[2].text = "PM10: {:d}".format(pm10)
+    #slogger.group[3].text = "PM1.0: {:d}".format(pm1) # uncomment to enable PM1.0 measuring
 
     time.sleep(interval)
