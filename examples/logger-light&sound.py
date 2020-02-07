@@ -71,6 +71,8 @@ while True:
         sound_level = math.log((reading/readings) + 1, 2)
         # weight the result using a -2x^3 + 3x^2 curve to emphasise changes around the midpoint (0.5)
         sound_level = (-2* sound_level**3 + 3* sound_level**2)
+        # then weight the result using a x^3 - 3x^2 + 3x curve to make the results fill the graph and not sit at the bottom
+        sound_level = (sound_level**3 - 3*sound_level**2 + 3*sound_level)
 
         # update the line graph
         slogger.update(
