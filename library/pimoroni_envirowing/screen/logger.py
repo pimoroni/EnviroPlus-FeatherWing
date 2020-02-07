@@ -135,6 +135,11 @@ class ScreenLogger:
                     difflen = len(self.data_points) - self.bitmap.width
                     self.data_points = self.data_points[difflen:]
                     
+                # clear bitmap
+                for x in range(self.bitmap.width):
+                    for y in range(self.bitmap.height):
+                        self.bitmap[x,y] = 0
+
                 for index,value in enumerate(self.data_points):
                     for subindex,point in enumerate(value):
                         #self.bitmap[(len(self.data_points) - 1),round(((point - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
