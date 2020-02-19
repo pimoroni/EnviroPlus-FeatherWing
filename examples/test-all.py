@@ -11,7 +11,7 @@ from adafruit_display_text import label
 from adafruit_st7735r import ST7735R
 from pimoroni_circuitpython_adapter import not_SMBus
 from pimoroni_envirowing import gas
-from pimoroni_envirowing.screen import logger
+from pimoroni_envirowing.screen import plotter
 from pimoroni_ltr559 import LTR559
 from pimoroni_pms5003 import PMS5003
 

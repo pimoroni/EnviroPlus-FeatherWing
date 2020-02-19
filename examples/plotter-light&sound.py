@@ -1,5 +1,5 @@
 """
-logger-light&sound.py
+plotter-light&sound.py
 
 Logs the levels of light and noise levels over a 24hr period (by default).
 """
@@ -24,10 +24,10 @@ from adafruit_display_text import label
 import pimoroni_physical_feather_pins
 from pimoroni_circuitpython_adapter import not_SMBus
 from pimoroni_envirowing import screen
-from pimoroni_envirowing.screen import logger
+from pimoroni_envirowing.screen import plotter
 from pimoroni_ltr559 import LTR559
 
-# colours for the logger are defined as rgb values in hex, with 2 bytes for each colour
+# colours for the plotter are defined as rgb values in hex, with 2 bytes for each colour
 red = 0xFF0000
 green = 0x00FF00
 blue = 0x0000FF
@@ -48,12 +48,12 @@ pwm = pulseio.PWMOut(pimoroni_physical_feather_pins.pin21())
 # start the screen at 50% brightness
 pwm.duty_cycle = 2**15
 
-# set up the logger
-slogger = logger.ScreenLogger([green, blue], display=screen, max_value=1)
+# set up the plotter
+splotter = plotter.ScreenPlotter([green, blue], display=screen, max_value=1)
 
 # add a colour coded text label for each reading
-slogger.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5, max_glyphs=15))
-slogger.group.append(label.Label(terminalio.FONT, text="Light", color=blue, x=80, y=5, max_glyphs=15))
+splotter.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5, max_glyphs=15))
+splotter.group.append(label.Label(terminalio.FONT, text="Light", color=blue, x=80, y=5, max_glyphs=15))
 
 # record the time that the sampling starts
 last_reading = time.monotonic()
@@ -75,17 +75,17 @@ while True:
         sound_level = (sound_level**3 - 3*sound_level**2 + 3*sound_level)
 
         # update the line graph
-        slogger.update(
+        splotter.update(
             sound_level,
-            slogger.remap(lux, 0, 1000, 0, 1)
+            splotter.remap(lux, 0, 1000, 0, 1)
         )
 
         # update the labels
-        slogger.group[1].text = "Sound: {:1.2f}".format(sound_level)
-        slogger.group[2].text = "Light: {:.0f}".format(lux)
+        splotter.group[1].text = "Sound: {:1.2f}".format(sound_level)
+        splotter.group[2].text = "Light: {:.0f}".format(lux)
 
         # change screen brightness according to the amount of light detected
-        pwm.duty_cycle = int(min(slogger.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
+        pwm.duty_cycle = int(min(splotter.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
 
         # reset the sound readings counters
         reading = 0

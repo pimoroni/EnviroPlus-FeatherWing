@@ -1,7 +1,7 @@
 """
-loggers-combined.py
+plotters-combined.py
 
-Combines all the loggers into one program, recording values over a 24hr period (by default).
+Combines all the plotters into one program, recording values over a 24hr period (by default).
 Allows you to switch page by waving your hand over the screen.
 """
 interval = 540 # full screen of reading spans 24hrs
@@ -32,7 +32,7 @@ from adafruit_display_text import label
 import pimoroni_physical_feather_pins
 from pimoroni_circuitpython_adapter import not_SMBus
 from pimoroni_envirowing import gas, screen
-from pimoroni_envirowing.screen import logger
+from pimoroni_envirowing.screen import plotter
 from pimoroni_ltr559 import LTR559
 from pimoroni_pms5003 import PMS5003
 
@@ -71,55 +71,55 @@ pwm.duty_cycle = 2**15
 # set up mic input
 mic = analogio.AnalogIn(pimoroni_physical_feather_pins.pin8())
 
-# colours for the logger are defined as rgb values in hex, with 2 bytes for each colour
+# colours for the plotter are defined as rgb values in hex, with 2 bytes for each colour
 red = 0xFF0000
 green = 0x00FF00
 blue = 0x0000FF
 
-# Setup bme280 screen logger
+# Setup bme280 screen plotter
 # the max value is set to 80 as it is the screen height in pixels (this is just to make a calculation later on easier)
-bme280_slogger = logger.ScreenLogger([red, green, blue, red+green+blue], max_value=80, min_value=0, display=screen)
+bme280_splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue], max_value=80, min_value=0, display=screen)
 
 # add a colour coded text label for each reading
-bme280_slogger.group.append(label.Label(terminalio.FONT, text="{:0.1f} C".format(bme280.temperature), color=red, x=0, y=5, max_glyphs=15))
-bme280_slogger.group.append(label.Label(terminalio.FONT, text="{:0.1f} hPa".format(bme280.pressure), color=green, x=50, y=5, max_glyphs=15))
-bme280_slogger.group.append(label.Label(terminalio.FONT, text="{:0.1f} %".format(bme280.humidity), color=blue, x=120, y=5, max_glyphs=15))
-#bme280_slogger.group.append(label.Label(terminalio.FONT, text="{:0.2f} m".format(bme280.altitude), color=red+green+blue, x=40, y=20, max_glyphs=15)) # uncomment for altitude estimation
+bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} C".format(bme280.temperature), color=red, x=0, y=5, max_glyphs=15))
+bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} hPa".format(bme280.pressure), color=green, x=50, y=5, max_glyphs=15))
+bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} %".format(bme280.humidity), color=blue, x=120, y=5, max_glyphs=15))
+#bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.2f} m".format(bme280.altitude), color=red+green+blue, x=40, y=20, max_glyphs=15)) # uncomment for altitude estimation
 
 # if the pms5003 is connected
 if is_pms5003:
-    # Set up the pms5003 screen logger
+    # Set up the pms5003 screen plotter
     # the max value is set to 1000 as a nice number to work with
-    pms5003_slogger = logger.ScreenLogger([green, blue, red+blue+green], max_value=1000, min_value=0, display=screen)
+    pms5003_splotter = plotter.ScreenPlotter([green, blue, red+blue+green], max_value=1000, min_value=0, display=screen)
 
     # add a colour coded text label for each reading
-    pms5003_slogger.group.append(label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5, max_glyphs=15))
-    pms5003_slogger.group.append(label.Label(terminalio.FONT, text="PM10: {:d}", color=blue, x=80, y=5, max_glyphs=15))
-    #pms5003_slogger.group.append(label.Label(terminalio.FONT, text="PM1.0: {:d}", color=red, x=0, y=20, max_glyphs=15)) # uncomment to enable PM1.0 measuring
+    pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5, max_glyphs=15))
+    pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM10: {:d}", color=blue, x=80, y=5, max_glyphs=15))
+    #pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM1.0: {:d}", color=red, x=0, y=20, max_glyphs=15)) # uncomment to enable PM1.0 measuring
 
     # red line for the WHO guideline (https://en.wikipedia.org/wiki/Air_quality_guideline)
     # made in a new bitmap so it doesn't get overwritten
-    pms5003_slogger.redline_bm = displayio.Bitmap(160, 1, 1)
-    pms5003_slogger.redline_pl = displayio.Palette(1)
-    pms5003_slogger.redline_pl[0] = red
-    pms5003_slogger.redline_tg = displayio.TileGrid(pms5003_slogger.redline_bm, pixel_shader=pms5003_slogger.redline_pl, x=0, y=39)
-    pms5003_slogger.group.append(pms5003_slogger.redline_tg)
+    pms5003_splotter.redline_bm = displayio.Bitmap(160, 1, 1)
+    pms5003_splotter.redline_pl = displayio.Palette(1)
+    pms5003_splotter.redline_pl[0] = red
+    pms5003_splotter.redline_tg = displayio.TileGrid(pms5003_splotter.redline_bm, pixel_shader=pms5003_splotter.redline_pl, x=0, y=39)
+    pms5003_splotter.group.append(pms5003_splotter.redline_tg)
 
-# Set up the gas screen logger
+# Set up the gas screen plotter
 # the max value is set to 3.3 as its the max voltage the feather can read
-gas_slogger = logger.ScreenLogger([red, green, blue], max_value=3.3, min_value=0.5, display=screen)
+gas_splotter = plotter.ScreenPlotter([red, green, blue], max_value=3.3, min_value=0.5, display=screen)
 
 # add a colour coded text label for each reading
-gas_slogger.group.append(label.Label(terminalio.FONT, text="OX: {:.0f}", color=red, x=0, y=5, max_glyphs=15))
-gas_slogger.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=80, y=5, max_glyphs=15))
-gas_slogger.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=0, y=20, max_glyphs=15))
+gas_splotter.group.append(label.Label(terminalio.FONT, text="OX: {:.0f}", color=red, x=0, y=5, max_glyphs=15))
+gas_splotter.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=80, y=5, max_glyphs=15))
+gas_splotter.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=0, y=20, max_glyphs=15))
 
-# set up the light&sound logger
-lightandsound_slogger = logger.ScreenLogger([green, blue], display=screen, max_value=1)
+# set up the light&sound plotter
+lightandsound_splotter = plotter.ScreenPlotter([green, blue], display=screen, max_value=1)
 
 # add a colour coded text label for each reading
-lightandsound_slogger.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5, max_glyphs=15))
-lightandsound_slogger.group.append(label.Label(terminalio.FONT, text="Light", color=blue, x=80, y=5, max_glyphs=15))
+lightandsound_splotter.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5, max_glyphs=15))
+lightandsound_splotter.group.append(label.Label(terminalio.FONT, text="Light", color=blue, x=80, y=5, max_glyphs=15))
 
 # record the time that the sampling starts
 last_reading = time.monotonic()
@@ -131,14 +131,14 @@ readings = 0
 
 # init the available pages
 available_pages = {
-    1: bme280_slogger,
-    2: gas_slogger,
-    3: lightandsound_slogger
+    1: bme280_splotter,
+    2: gas_splotter,
+    3: lightandsound_splotter
 }
 
 # if pms5003 detected, add to available pages
 if is_pms5003:
-    available_pages.update({0:pms5003_slogger})
+    available_pages.update({0:pms5003_splotter})
 
 current_page = 3
 
@@ -169,7 +169,7 @@ while True:
             available_pages[current_page].draw(full_refresh=True)
         else:
             # change screen brightness according to the amount of light detected
-            pwm.duty_cycle = int(min(lightandsound_slogger.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
+            pwm.duty_cycle = int(min(lightandsound_splotter.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
 
         # if interval time has passed since last reading
         if last_reading + interval < time.monotonic():
@@ -181,20 +181,20 @@ while True:
             #altitude = bme280.altitude # uncomment for altitude estimation
 
             # update the line graph
-            bme280_slogger.update(
+            bme280_splotter.update(
                 # scale to 70 pixels max height to allow the labels to have dedicated screen space
-                bme280_slogger.remap(temperature, 0, 50, 0, 70),
-                bme280_slogger.remap(pressure, 975, 1025, 0, 70),
-                bme280_slogger.remap(humidity, 0, 100, 0, 70),
-                #bme280_slogger.remap(altitude, 0, 1000, 0, 70), # uncomment for altitude estimation
+                bme280_splotter.remap(temperature, 0, 50, 0, 70),
+                bme280_splotter.remap(pressure, 975, 1025, 0, 70),
+                bme280_splotter.remap(humidity, 0, 100, 0, 70),
+                #bme280_splotter.remap(altitude, 0, 1000, 0, 70), # uncomment for altitude estimation
                 draw=False
             )
 
             # update the labels
-            bme280_slogger.group[1].text = "{:0.1f} C".format(temperature)
-            bme280_slogger.group[2].text = "{:0.1f} hPa".format(pressure)
-            bme280_slogger.group[3].text = "{:0.1f} %".format(humidity)
-            #bme280_slogger.group[4].text = "{:0.2f} m".format(altitude) # uncomment for altitude estimation
+            bme280_splotter.group[1].text = "{:0.1f} C".format(temperature)
+            bme280_splotter.group[2].text = "{:0.1f} hPa".format(pressure)
+            bme280_splotter.group[3].text = "{:0.1f} %".format(humidity)
+            #bme280_splotter.group[4].text = "{:0.2f} m".format(altitude) # uncomment for altitude estimation
 
             gc.collect()
 
@@ -203,7 +203,7 @@ while True:
 
             # update the line graph
             # the value plotted on the graph is the voltage drop over each sensor, not the resistance, as it graphs nicer
-            gas_slogger.update(
+            gas_splotter.update(
                 gas_reading._OX.value * (gas_reading._OX.reference_voltage/65535),
                 gas_reading._RED.value * (gas_reading._RED.reference_voltage/65535),
                 gas_reading._NH3.value * (gas_reading._NH3.reference_voltage/65535),
@@ -211,9 +211,9 @@ while True:
             )
 
             # update the labels
-            gas_slogger.group[1].text = "OX: {:.0f}K".format(gas_reading.oxidising/1000)
-            gas_slogger.group[2].text = "RED: {:.0f}K".format(gas_reading.reducing/1000)
-            gas_slogger.group[3].text = "NH3: {:.0f}K".format(gas_reading.nh3/1000)
+            gas_splotter.group[1].text = "OX: {:.0f}K".format(gas_reading.oxidising/1000)
+            gas_splotter.group[2].text = "RED: {:.0f}K".format(gas_reading.reducing/1000)
+            gas_splotter.group[3].text = "NH3: {:.0f}K".format(gas_reading.nh3/1000)
 
             gc.collect()
 
@@ -225,15 +225,15 @@ while True:
             sound_level = (sound_level**3 - 3*sound_level**2 + 3*sound_level)
 
             # update the line graph
-            lightandsound_slogger.update(
+            lightandsound_splotter.update(
                 sound_level,
-                lightandsound_slogger.remap(lux, 0, 1000, 0, 1),
+                lightandsound_splotter.remap(lux, 0, 1000, 0, 1),
                 draw=False
             )
 
             # update the labels
-            lightandsound_slogger.group[1].text = "Sound: {:1.2f}".format(sound_level)
-            lightandsound_slogger.group[2].text = "Light: {:.0f}".format(lux)
+            lightandsound_splotter.group[1].text = "Sound: {:1.2f}".format(sound_level)
+            lightandsound_splotter.group[2].text = "Light: {:.0f}".format(lux)
 
             gc.collect()
 
@@ -245,17 +245,17 @@ while True:
                 #pm1 = pms_reading.data[0] # uncomment to enable PM1.0 measuring
 
                 # update the line graph
-                pms5003_slogger.update(
-                    pms5003_slogger.remap(pm2, 0, 50, 0, 1000),
-                    pms5003_slogger.remap(pm10, 0, 100, 0, 1000),
-                    #pms5003_slogger.remap(pm1, 0, 100, 0, 1000), # uncomment to enable PM1.0 measuring
+                pms5003_splotter.update(
+                    pms5003_splotter.remap(pm2, 0, 50, 0, 1000),
+                    pms5003_splotter.remap(pm10, 0, 100, 0, 1000),
+                    #pms5003_splotter.remap(pm1, 0, 100, 0, 1000), # uncomment to enable PM1.0 measuring
                     draw=False
                 )
 
                 # update the labels
-                pms5003_slogger.group[1].text = "PM2.5: {:d}".format(pm2)
-                pms5003_slogger.group[2].text = "PM10: {:d}".format(pm10)
-                #pms5003_slogger.group[3].text = "PM1.0: {:d}".format(pm1) # uncomment to enable PM1.0 measuring
+                pms5003_splotter.group[1].text = "PM2.5: {:d}".format(pm2)
+                pms5003_splotter.group[2].text = "PM10: {:d}".format(pm10)
+                #pms5003_splotter.group[3].text = "PM1.0: {:d}".format(pm1) # uncomment to enable PM1.0 measuring
                 
                 gc.collect()
 

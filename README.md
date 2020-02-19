@@ -7,7 +7,7 @@
 
 ## Warning
 The following examples will not work on the M0 boards, this is due to their limited RAM compared to other circuitpython feathers:
-* `logger-bme280-example.py`
+* `plotter-bme280-example.py`
 * 
 * `test-all.py`
 

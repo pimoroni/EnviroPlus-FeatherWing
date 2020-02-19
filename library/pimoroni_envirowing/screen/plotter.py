@@ -1,4 +1,4 @@
-class ScreenLogger:
+class ScreenPlotter:
     def __init__(self, colours, bg_colour=None, max_value=None, min_value=None, display=None):
         """__init__
 
@@ -62,7 +62,7 @@ class ScreenLogger:
     def update(self, *values, draw=True):
         """update
 
-        :param *values: the values to send to the logger
+        :param *values: the values to send to the plotter
 
         :param bool draw: if set to false, will not draw the line graph, just update the data points
         """
