@@ -10,6 +10,8 @@ clap_threshold = 1000 # the higher the value the less sensitive
 
 def double_clap_function(): # what you want to do when there is a double clap
     print("Double Clap!")
+    time.sleep(1)
+    print("\n\n\n\n\n\n")
 
 while True: # detection start
     for i in range(20): # take 20 samples of how loud it is
