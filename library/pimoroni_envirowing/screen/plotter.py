@@ -1,5 +1,5 @@
 class ScreenPlotter:
-    def __init__(self, colours, bg_colour=None, max_value=None, min_value=None, display=None):
+    def __init__(self, colours, bg_colour=None, max_value=None, min_value=None, display=None, top_space=None):
         """__init__
 
         :param list colours: a list of colours to use for data lines
@@ -11,6 +11,8 @@ class ScreenPlotter:
         :param int min_value: the min value to show on the plotter (the bottom)
 
         :param display: a supplied display object (creates one if not supplied)
+
+        :param int top_space: the number of pixels in height to reserve for titles and labels (and not draw lines in)
         """
         import displayio
 
@@ -20,10 +22,16 @@ class ScreenPlotter:
             self.display = screen.Screen()
         else:
             self.display = display
+
         self.num_colours = len(colours) + 1
 
-        self.bitmap = displayio.Bitmap(160, 80, self.num_colours)
-
+        if top_space:
+            self.bitmap = displayio.Bitmap(160, 80 - top_space, self.num_colours)
+            self.top_offset = top_space
+        else:
+            self.bitmap = displayio.Bitmap(160, 80, self.num_colours)
+            self.top_offset = 0
+            
         self.palette = displayio.Palette(self.num_colours)
 
         if bg_colour:
@@ -34,7 +42,7 @@ class ScreenPlotter:
         for i,j in enumerate(colours):
             self.palette[i+1] = j
         
-        self.tile_grid = displayio.TileGrid(self.bitmap, pixel_shader=self.palette)
+        self.tile_grid = displayio.TileGrid(self.bitmap, pixel_shader=self.palette, y=self.top_offset)
 
         self.group = displayio.Group(max_size=12)
 
