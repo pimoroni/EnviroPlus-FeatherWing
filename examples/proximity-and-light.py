@@ -5,6 +5,7 @@ from pimoroni_circuitpython_adapter import not_SMBus
 import pimoroni_physical_feather_pins
 from pimoroni_envirowing import screen
 
+# set up the screen and tell it we want to handle the backlight ourselves
 screen = screen.Screen(backlight_control=False)
 
 # define a remap function to scale a value from an old range to a new range, preserving ratio
