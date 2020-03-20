@@ -29,8 +29,8 @@ bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=0x76)
 # average global sea level pressure, for more accurate readings change this to your local sea level pressure (measured in hPa)
 bme280.sea_level_pressure = 1013.25
 
-# the max value is set to 80 as it is the screen height in pixels (this is just to make a calculation later on easier)
-splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue], max_value=80, min_value=0)
+# the max value is set to 70 as it is the screen height in pixels after the labels (top_space) (this is just to make a calculation later on easier)
+splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue], max_value=70, min_value=0, top_space=10)
 
 # add a colour coded text label for each reading
 splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} C".format(bme280.temperature), color=red, x=0, y=5, max_glyphs=15))
@@ -48,7 +48,7 @@ while True:
 
     # update the line graph
     splotter.update(
-        # scale to 70 pixels max height to allow the labels to have dedicated screen space
+        # scale to 70 as that's the number of pixels height available
         splotter.remap(temperature, 0, 50, 0, 70),
         splotter.remap(pressure, 975, 1025, 0, 70),
         splotter.remap(humidity, 0, 100, 0, 70),

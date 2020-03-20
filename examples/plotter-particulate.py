@@ -31,7 +31,7 @@ pms5003 = PMS5003()
 
 # Set up the plotter
 # the max value is set to 1000 as a nice number to work with
-splotter = plotter.ScreenPlotter([green, blue, red+blue+green], max_value=1000, min_value=0)
+splotter = plotter.ScreenPlotter([green, blue, red+blue+green], max_value=1000, min_value=0, top_space=10)
 
 # add a colour coded text label for each reading
 splotter.group.append(label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5, max_glyphs=15))
@@ -43,7 +43,7 @@ splotter.group.append(label.Label(terminalio.FONT, text="PM10: {:d}", color=blue
 splotter.redline_bm = displayio.Bitmap(160, 1, 1)
 splotter.redline_pl = displayio.Palette(1)
 splotter.redline_pl[0] = red
-splotter.redline_tg = displayio.TileGrid(splotter.redline_bm, pixel_shader=splotter.redline_pl, x=0, y=39)
+splotter.redline_tg = displayio.TileGrid(splotter.redline_bm, pixel_shader=splotter.redline_pl, x=0, y=44)
 splotter.group.append(splotter.redline_tg)
 
 

@@ -49,7 +49,7 @@ pwm = pulseio.PWMOut(pimoroni_physical_feather_pins.pin21())
 pwm.duty_cycle = 2**15
 
 # set up the plotter
-splotter = plotter.ScreenPlotter([green, blue], display=screen, max_value=1)
+splotter = plotter.ScreenPlotter([green, blue], display=screen, max_value=1, top_space=10)
 
 # add a colour coded text label for each reading
 splotter.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5, max_glyphs=15))

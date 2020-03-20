@@ -77,8 +77,8 @@ green = 0x00FF00
 blue = 0x0000FF
 
 # Setup bme280 screen plotter
-# the max value is set to 80 as it is the screen height in pixels (this is just to make a calculation later on easier)
-bme280_splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue], max_value=80, min_value=0, display=screen)
+# the max value is set to 70 as it is the screen height in pixels after the labels (top_space) (this is just to make a calculation later on easier)
+bme280_splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue], max_value=70, min_value=0, top_space=10, display=screen)
 
 # add a colour coded text label for each reading
 bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} C".format(bme280.temperature), color=red, x=0, y=5, max_glyphs=15))
@@ -90,7 +90,7 @@ bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} %".forma
 if is_pms5003:
     # Set up the pms5003 screen plotter
     # the max value is set to 1000 as a nice number to work with
-    pms5003_splotter = plotter.ScreenPlotter([green, blue, red+blue+green], max_value=1000, min_value=0, display=screen)
+    pms5003_splotter = plotter.ScreenPlotter([green, blue, red+blue+green], max_value=1000, min_value=0, top_space=10, display=screen)
 
     # add a colour coded text label for each reading
     pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5, max_glyphs=15))
@@ -102,20 +102,28 @@ if is_pms5003:
     pms5003_splotter.redline_bm = displayio.Bitmap(160, 1, 1)
     pms5003_splotter.redline_pl = displayio.Palette(1)
     pms5003_splotter.redline_pl[0] = red
-    pms5003_splotter.redline_tg = displayio.TileGrid(pms5003_splotter.redline_bm, pixel_shader=pms5003_splotter.redline_pl, x=0, y=39)
+    pms5003_splotter.redline_tg = displayio.TileGrid(pms5003_splotter.redline_bm, pixel_shader=pms5003_splotter.redline_pl, x=0, y=44)
     pms5003_splotter.group.append(pms5003_splotter.redline_tg)
 
 # Set up the gas screen plotter
 # the max value is set to 3.3 as its the max voltage the feather can read
-gas_splotter = plotter.ScreenPlotter([red, green, blue], max_value=3.3, min_value=0.5, display=screen)
+gas_splotter = plotter.ScreenPlotter([red, green, blue], max_value=3.3, min_value=0.5, top_space=10, display=screen)
 
 # add a colour coded text label for each reading
 gas_splotter.group.append(label.Label(terminalio.FONT, text="OX: {:.0f}", color=red, x=0, y=5, max_glyphs=15))
-gas_splotter.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=80, y=5, max_glyphs=15))
-gas_splotter.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=0, y=20, max_glyphs=15))
+gas_splotter.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=50, y=5, max_glyphs=15))
+gas_splotter.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=110, y=5, max_glyphs=15))
+
+# from https://stackoverflow.com/a/49955617
+def human_format(num, round_to=0):
+    magnitude = 0
+    while abs(num) >= 1000:
+        magnitude += 1
+        num = round(num / 1000.0, round_to)
+    return '{:.{}f}{}'.format(round(num, round_to), round_to, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
 
 # set up the light&sound plotter
-lightandsound_splotter = plotter.ScreenPlotter([green, blue], display=screen, max_value=1)
+lightandsound_splotter = plotter.ScreenPlotter([green, blue], display=screen, max_value=1, top_space=10)
 
 # add a colour coded text label for each reading
 lightandsound_splotter.group.append(label.Label(terminalio.FONT, text="Sound", color=green, x=0, y=5, max_glyphs=15))
@@ -182,7 +190,7 @@ while True:
 
             # update the line graph
             bme280_splotter.update(
-                # scale to 70 pixels max height to allow the labels to have dedicated screen space
+                # scale to 70 as that's the number of pixels height available
                 bme280_splotter.remap(temperature, 0, 50, 0, 70),
                 bme280_splotter.remap(pressure, 975, 1025, 0, 70),
                 bme280_splotter.remap(humidity, 0, 100, 0, 70),
@@ -211,9 +219,9 @@ while True:
             )
 
             # update the labels
-            gas_splotter.group[1].text = "OX: {:.0f}K".format(gas_reading.oxidising/1000)
-            gas_splotter.group[2].text = "RED: {:.0f}K".format(gas_reading.reducing/1000)
-            gas_splotter.group[3].text = "NH3: {:.0f}K".format(gas_reading.nh3/1000)
+            gas_splotter.group[1].text = "OX:{}".format(human_format(gas_reading.oxidising))
+            gas_splotter.group[2].text = "RED:{}".format(human_format(gas_reading.reducing))
+            gas_splotter.group[3].text = "NH3:{}".format(human_format(gas_reading.nh3))
 
             gc.collect()
 

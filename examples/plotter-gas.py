@@ -23,13 +23,20 @@ green = 0x00FF00
 blue = 0x0000FF
 
 # the max value is set to 3.3 as its the max voltage the feather can read
-splotter = plotter.ScreenPlotter([red, green, blue], max_value=3.3, min_value=0.5)
+splotter = plotter.ScreenPlotter([red, green, blue], max_value=3.3, min_value=0.5, top_space=10)
 
 # add a colour coded text label for each reading
-splotter.group.append(label.Label(terminalio.FONT, text="OX: {:.0f}", color=red, x=0, y=5, max_glyphs=15))
-splotter.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=80, y=5, max_glyphs=15))
-splotter.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=0, y=20, max_glyphs=15))
+splotter.group.append(label.Label(terminalio.FONT, text="OX:{}", color=red, x=0, y=5, max_glyphs=15))
+splotter.group.append(label.Label(terminalio.FONT, text="RED:{}", color=green, x=50, y=5, max_glyphs=15))
+splotter.group.append(label.Label(terminalio.FONT, text="NH3:{}", color=blue, x=110, y=5, max_glyphs=15))
 
+# from https://stackoverflow.com/a/49955617
+def human_format(num, round_to=0):
+    magnitude = 0
+    while abs(num) >= 1000:
+        magnitude += 1
+        num = round(num / 1000.0, round_to)
+    return '{:.{}f}{}'.format(round(num, round_to), round_to, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
 
 while True:
     #take readings
@@ -44,8 +51,8 @@ while True:
     )
 
     # update the labels
-    splotter.group[1].text = "OX: {:.0f}K".format(reading.oxidising/1000)
-    splotter.group[2].text = "RED: {:.0f}K".format(reading.reducing/1000)
-    splotter.group[3].text = "NH3: {:.0f}K".format(reading.nh3/1000)
+    splotter.group[1].text = "OX:{}".format(human_format(reading.oxidising))
+    splotter.group[2].text = "RED:{}".format(human_format(reading.reducing))
+    splotter.group[3].text = "NH3:{}".format(human_format(reading.nh3))
     
     time.sleep(interval)
