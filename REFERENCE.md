@@ -49,56 +49,56 @@
 ### Examples
 
 #### bme280-simple
-[bme280-simple.py](..blob/master/examples/bme280-simple.py)
+[bme280-simple.py](../../blob/master/examples/bme280-simple.py)
 
 Prints out the readings from the temperature, pressure and humidity sensor, along with its estimated altitude calculation.
 
 #### screen
-[screen.py](..blob/master/examples/screen.py)
+[screen.py](../../blob/master/examples/screen.py)
 
 Draws a few things on the screen using displayio.
 
 #### gas-sensor
-[gas-sensor.py](..blob/master/examples/gas-sensor.py)
+[gas-sensor.py](../../blob/master/examples/gas-sensor.py)
 
 Prints the readings from the gas sensor once a second.
 
 #### microphone
-[microphone.py](..blob/master/examples/microphone.py)
+[microphone.py](../../blob/master/examples/microphone.py)
 
 Continuously waits for a double clap and prints when it hears one.
 
 Perfect for hacking! Just change the code in `double_clap_function` to whatever you want; toggle an LED, show something on screen, etc.
 
 #### particulate-sensor
-[particulate-sensor.py](..blob/master/examples/particulate-sensor.py)
+[particulate-sensor.py](../../blob/master/examples/particulate-sensor.py)
 
 Prints the readings from the particulate sensor as fast as it supplies them (typically 1 per second).
 
 Remember to plug it in to the header on the board!
 
 #### proximity-and-light
-[proximity-and-light.py](..blob/master/examples/proximity-and-light.py)
+[proximity-and-light.py](../../blob/master/examples/proximity-and-light.py)
 
 Quickly prints out the readings from the proximity and light sensor, and adjusts the screen's backlight according to the light readings.
 
 #### plotter-bme280
-[plotter-bme280.py](..blob/master/examples/plotter-bme280.py)
+[plotter-bme280.py](../../blob/master/examples/plotter-bme280.py)
 
 Draws a line graph of readings from the temperature, pressure and humidity sensor on the screen.
 
 #### plotter-gas
-[plotter-gas.py](..blob/master/examples/plotter-gas.py)
+[plotter-gas.py](../../blob/master/examples/plotter-gas.py)
 
 Draws a line graph of readings from the gas sensor on the screen.
 
 #### plotter-light&sound
-[plotter-light&sound.py](..blob/master/examples/plotter-light&sound.py)
+[plotter-light&sound.py](../../blob/master/examples/plotter-light&sound.py)
 
 Draws a line graph of readings from the light and proximity sensors, and the noise level determined from microphone readings on the screen.
 
 #### plotter-particulate
-[plotter-particulate.py](..blob/master/examples/plotter-particulate.py)
+[plotter-particulate.py](../../blob/master/examples/plotter-particulate.py)
 
 Draws a line graph of readings from the particulate sensor on the screen.
 
@@ -111,7 +111,7 @@ PM1.0 readings are disabled by default as there is no standard to compare to at 
 Remember to plug it in to the header on the board!
 
 #### plotters-combined
-[plotters-combined.py](..blob/master/examples/plotters-combined.py)
+[plotters-combined.py](../../blob/master/examples/plotters-combined.py)
 
 Combines all of the separate plotter examples into one!
 
@@ -120,17 +120,17 @@ You can switch page by waving your hand over the proximity sensor for a second.
 If the particulate sensor isn't plugged in, it'll just skip it and still work.
 
 #### logger-bme280
-[logger-bme280.py](..blob/master/examples/logger-bme280.py)
+[logger-bme280.py](../../blob/master/examples/logger-bme280.py)
 
 TODO
 
 #### logger-gas
-[logger-gas.py](..blob/master/examples/logger-gas.py)
+[logger-gas.py](../../blob/master/examples/logger-gas.py)
 
 TODO
 
 #### test-all
-[test-all.py](..blob/master/examples/test-all.py)
+[test-all.py](../../blob/master/examples/test-all.py)
 
 Runs a full self test.
 
@@ -139,7 +139,7 @@ Useful for troubleshooting to see if something's wrong.
 If the particulate sensor isn't plugged in, it will fail the particulate test.
 
 #### test-all-low-mem
-[test-all-low-mem.py](..blob/master/examples/test-all-low-mem/test-all-low-mem.py)
+[test-all-low-mem.py](../../blob/master/examples/test-all-low-mem/test-all-low-mem.py)
 
 TODO
 
