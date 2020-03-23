@@ -149,9 +149,59 @@ TODO
 
 #### BME280
 
+```python
+import adafruit_bme280
+
+bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c_bus, address=0x76)
+```
+Imports and sets up the device, the address needs to be specified as we use a different default to adafruit.
+
+```python
+bme280.sea_level_pressure = 1013.25
+```
+Sets the sea level pressure, which is used in altitude calculation/estimation
+
+```python
+print(bme280.temperature)
+print(bme280.humidity)
+print(bme280.pressure)
+print(bme280.altitude)
+```
+Readings can be accessed with the above methods, Altitude as mentioned before is a calculation/estimation based off the other readings,and is best used as a relative reading rather than an absolute.
+
+Further documentation can be found [here](https://circuitpython.readthedocs.io/projects/bme280/en/latest/)
+
+
 #### Gas
 
+```python
+from pimoroni_envirowing import gas
+```
+Just an import is needed here, no code setup required. However the gas sensor may need time to warm up before it gives consistent readings (TODO Exact-ish time)
+
+```python
+print(gas.read_all())
+```
+This will print a well formatted summary of all the readings.
+
+```python
+reading = gas.read_all()
+
+print(reading.oxidising)
+print(reading.reducing)
+print(reading.nh3)
+```
+Individual values can be accessed by the above methods. If you attempt to access the individual readings by using for example `print(gas.read_all().oxidising)`, it will still work, however if you make other readings in a similar fashion it will make a new reading each time, as opposed to the recommended method above which will make only one reading, and thus all the measurements will occupy the same time slice.
+
 #### Microphone
+
+This one is a little different, as it doesn't have a dedicated library, and is accessed through circuitpython's analogue pin reading methods.
+
+The best place to start is the [microphone example](#microphone), as circuitpython does not yet supply a library for sampling audio quickly from raw pins.
+
+TODO: mention which pin the mic is on
+
+The microphone has a DC offset of 1.5V, so it's possible to get full waveform readings from it (as feather ADCs are usually 0-3V)
 
 #### Particulate Sensor
 
