@@ -177,7 +177,7 @@ Further documentation can be found [here](https://circuitpython.readthedocs.io/p
 ```python
 from pimoroni_envirowing import gas
 ```
-Just an import is needed here, no code setup required. However the gas sensor may need time to warm up before it gives consistent readings (TODO Exact-ish time)
+Just an import is needed here, no code setup required. However the gas sensor may need time to warm up before it gives consistent readings, a day or so from being powered, longer if this is the first time you've used it.
 
 ```python
 print(gas.read_all())
@@ -205,7 +205,54 @@ The microphone has a DC offset of 1.5V, so it's possible to get full waveform re
 
 #### Particulate Sensor
 
+```python
+from pimoroni_pms5003 import PMS5003
+
+pms5003 = PMS5003()
+```
+Import and setup is as above, make sure you have the cable plugged firmly in at both ends. It'll take a little time for the sensor to start up, within a minute or so.
+
+```python
+data = pms5003.read()
+print(data)
+```
+This will print a well formatted summary of all the readings.
+
+The sensor typically send new readings every second.
+
+```python
+reading = pms5003.read()
+pm1 = reading.data[0] # PM1.0
+pm2 = reading.data[1] # PM2.5
+pm10 = reading.data[2] # PM10
+print(pm1)
+print(pm2)
+print(pm10)
+```
+Individual values can be accessed by the above methods. If you attempt to access the individual readings by using for example `print(pms5003.read().data[0])`, it will still work, however if you make other readings in a similar fashion it will have to wait for the sensor to send a new reading each time, as opposed to the recommended method above which will use only one reading, and thus all the measurements will occupy the same time slice.
+
 #### Proximity and Light
+
+```python
+from pimoroni_ltr559 import LTR559
+from pimoroni_circuitpython_adapter import not_SMBus
+
+i2c_dev = not_SMBus()
+ltr559 = LTR559(i2c_dev=i2c_dev)
+```
+Import and setup is as above. `not_SMBus` is needed as circuitpython does not natively expose the i2c functions that the library expects and requires.
+
+```python
+lux = ltr559.get_lux()
+prox = ltr559.get_proximity()
+print(lux)
+print(prox)
+```
+Light and proximity reading can be obtained using the above methods.
+
+Interrupts can be set up similarly to [the proximity interrupt example in the library](https://github.com/pimoroni/ltr559-python/blob/master/examples/proximity-interrupt.py), however circuitpython does not yet have a function for native interrupts at the time of writing.
+
+The LTR-559 interrupt pin is broken out to Pin 24 on the wing.
 
 ### Utilities
 
