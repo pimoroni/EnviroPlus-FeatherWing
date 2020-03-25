@@ -258,7 +258,63 @@ The LTR-559 interrupt pin is broken out to Pin 24 on the wing.
 
 #### Screen
 
+```python
+from pimoroni_envirowing import screen
+
+display = screen.Screen()
+```
+The above will import, setup and initialise the display on the envirowing. If you're using another device on the SPI bus, you'll want to use the `spi` option to pass it the shared SPI bus.
+
+If you want to control the backlight, you'll first need to use the `backlight_control=False` option, and then send a pwm signal out to Pin 21, as seen in [the proximity-and-light example](#proximity-and-light).
+
+You can then go on to use the `display` object with displayio.
+
 #### Plotter
+
+```python
+from pimoroni_envirowing.screen import plotter
+
+white = 0xFFFFFF
+
+splotter = plotter.ScreenPlotter([white])
+```
+The most simple import and setup of plotter is as above.
+This will allow you to plot one reading over time, drawn in white, with the default min and max values, which match those of circuitpython's raw analogue input readings (0 to 65535).
+
+An example of so, updating once a second, follows:
+
+```python
+import time
+import board
+from analogio import AnalogIn
+from pimoroni_envirowing.screen import plotter
+
+analog_in = AnalogIn(board.A1)
+
+white = 0xFFFFFF
+
+splotter = plotter.ScreenPlotter([white])
+
+while True:
+    splotter.update(analog_in.value)
+    time.sleep(1)
+```
+
+To add more readings, more colours need to be added to the list in the plotter setup, eg:
+```python
+white = 0xFFFFFF
+red = 0xFF0000
+splotter = plotter.ScreenPlotter([white, red])
+```
+You then simply add more values to the update call:
+```python
+    splotter.update(analog_in.value, another_analog_in.value)
+```
+These will be coloured in the same order you define the colours in the setup. So `analog_in` will be white, and `another_analog_in` will be red.
+
+The number of colours you define in setup must be equal to or more than the number of readings you make in `update`.
+
+More advanced usage can be found in [the plotter examples](#plotter-bme280), and [the plotter code itself](../../blob/master/library/pimoroni_envirowing/screen/plotter.py).
 
 #### Logger
 
