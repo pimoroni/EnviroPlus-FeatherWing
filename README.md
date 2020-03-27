@@ -41,3 +41,5 @@ The following examples will not work on the M0 boards, this is due to their limi
 To clone the repository, please use `git clone` with the option `--recurse-submodules`, otherwise not all the libraries will be downloaded. Do not download the zip as this will not contain all the libraries either.
 
 Example: `git clone https://github.com/pimoroni/EnviroPlus-FeatherWing --recurse-submodules`
+
+When cloning, the symlinks set up for library building only seem to work on linux (and maybe mac? untested). You may also need to make sure this config option hasn't been set to False: `git config --get core.symlinks`
