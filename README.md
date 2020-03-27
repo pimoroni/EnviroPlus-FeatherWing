@@ -1,9 +1,13 @@
 # Enviro Plus FeatherWing
 
+[TODO: Shop Link]
+
+[TODO: Product Summary]
+
 ## Quick Start
 If you know what you're doing, start here:
 
-If not, follow our detailed [Getting Started](..blob/master/REFERENCE.md) guide
+If not, follow our detailed [Getting Started](../../blob/master/REFERENCE.md) guide
 
 ### Recommended Hardware
 
@@ -19,12 +23,13 @@ We recommend using the following hardware:
 We recommend using [Mu editor](https://codewith.mu/), as it has built in support for circuitpython devices
 
 
-## Requirements
+### Dependencies
 
 * [Circuitpython 4.x](https://circuitpython.org/downloads) (soon to be 5.x)
 * [Adafruit CircuitPython Library Bundle](https://circuitpython.org/libraries)
     * Specifically `adafruit_st7735r`, `adafruit_bme280`, `adafruit_bus_device`
     * Optionally `adafruit_display_text` (needed for the screen and the bm280 logging examples, and if you want to display text on the screen)
+* [The latest release of the Envirowing libraries (this repo!)](../../releases)
 
 ## Warning
 The following examples will not work on the M0 boards, this is due to their limited RAM compared to other circuitpython feather boards:
