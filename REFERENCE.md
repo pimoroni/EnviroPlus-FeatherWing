@@ -5,6 +5,7 @@
     - [Installing CircuitPython](#installing-circuitpython)
     - [Installing Adafruit Libraries](#installing-adafruit-libraries)
     - [Installing Pimoroni Libraries](#installing-pimoroni-libraries)
+    - [Finally](#finally)
     - [Troubleshooting](#troubleshooting)
   - [Examples](#examples)
     - [bme280-simple](#bme280-simple)
@@ -38,13 +39,41 @@
 
 ### Installing
 
+Plug in your Feather board to your computer using a known good micro usb data cable.
+
+Verify that the version of circuitpython on the board is a compatible one with our libraries (see [Dependencies in the Readme](../../blob/master/README.md#dependencies)).
+
+(To find this out, open up the CIRCUITPY drive and read the `boot_out.txt` file)
+
+If it's not, follow the [Installing CircuitPython](#installing-circuitpython) step (you can skip that step if it is).
+
 #### Installing CircuitPython
+
+Follow [these instructions from Adafruit](https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython) to install the correct version of circuitpython to your board.
 
 #### Installing Adafruit Libraries
 
+Follow [these instructions from Adafruit](https://learn.adafruit.com/welcome-to-circuitpython/circuitpython-libraries) to install the correct Adafruit libraries to your board.
+If your board has limited storage space (usually non-Express Feathers), install only the libraries specified in [Dependencies](../../blob/master/README.md#dependencies).
+
 #### Installing Pimoroni Libraries
 
+Download the [latest release](../../releases), and copy the contents of the `lib` folder in the zip you downloaded into the `lib` folder in your CIRCUITPY drive. Make sure you download the correct zip, you don't want the `Source Code` one!
+
+#### Finally
+
+Don't forget to attach your EnviroWing to your Feather!
+
+To code on your feather, you might want to use Mu. [Adafruit have instructions on how to install it and set it up](https://learn.adafruit.com/welcome-to-circuitpython/installing-mu-editor).
+
+Finally, have a play! Copy an example from the zip you downloaded into `code.py` on CIRCUITPY, and watch it work!
+
 #### Troubleshooting
+
+Things to check:
+* Is the EnviroWing seated properly on the Feather?
+* Is the usb cable you're using fully inserted and working?
+* Did you check the serial output for errors?
 
 ### Examples
 
