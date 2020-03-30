@@ -141,7 +141,7 @@ Remember to plug the PMS5003 particulate matter sensor into the socket on the un
 
 Combines all of the separate plotter examples into one!
 
-You can switch page by waving your hand over the proximity sensor for a moment.
+You can switch page by waving your hand over the proximity sensor for one second.
 
 If the particulate matter sensor isn't plugged in, it'll just skip it and still work.
 
@@ -208,7 +208,7 @@ Individual values can be accessed by the above methods. If you attempt to access
 
 #### Analog microphone
 
-This one is a little different, as it doesn't have a dedicated library, and is accessed through CircuitPython's analog pin reading methods.
+This one is a little different, as it doesn't have a dedicated library, and is accessed through CircuitPython's analog pin reading methods (on pin 8, in this case).
 
 The best place to start is the [microphone example](#microphone), as CircuitPython does not yet supply a library for sampling audio quickly from raw pins.
 
