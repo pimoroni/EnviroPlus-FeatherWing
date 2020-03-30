@@ -10,6 +10,7 @@ interval = 540 # full screen of reading spans 24hrs
 #interval = 3600 # uncomment for 1 reading per hour
 
 # the higher the threshold value the less sensitive, we've found this to be a good default through testing
+# if you go with a lower interval than default, it might be worth lowering the threshold to get more significant results
 threshold = 3100 
 
 import time
