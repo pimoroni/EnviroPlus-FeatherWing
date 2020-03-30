@@ -185,10 +185,14 @@ bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c_bus, address=0x76)
 ```
 Imports and sets up the device, the address needs to be specified as we use a different default to adafruit.
 
+---
+
 ```python
 bme280.sea_level_pressure = 1013.25
 ```
 Sets the sea level pressure, which is used in altitude calculation/estimation
+
+---
 
 ```python
 print(bme280.temperature)
@@ -198,8 +202,11 @@ print(bme280.altitude)
 ```
 Readings can be accessed with the above methods, Altitude as mentioned before is a calculation/estimation based off the other readings,and is best used as a relative reading rather than an absolute.
 
+---
+
 Further documentation can be found [here](https://circuitpython.readthedocs.io/projects/bme280/en/latest/)
 
+---
 
 #### Gas
 
@@ -208,10 +215,14 @@ from pimoroni_envirowing import gas
 ```
 Just an import is needed here, no code setup required. However the gas sensor may need time to warm up before it gives consistent readings, a day or so from being powered, longer if this is the first time you've used it.
 
+---
+
 ```python
 print(gas.read_all())
 ```
 This will print a well formatted summary of all the readings.
+
+---
 
 ```python
 reading = gas.read_all()
@@ -221,6 +232,8 @@ print(reading.reducing)
 print(reading.nh3)
 ```
 Individual values can be accessed by the above methods. If you attempt to access the individual readings by using for example `print(gas.read_all().oxidising)`, it will still work, however if you make other readings in a similar fashion it will make a new reading each time, as opposed to the recommended method above which will make only one reading, and thus all the measurements will occupy the same time slice.
+
+---
 
 #### Microphone
 
@@ -232,6 +245,8 @@ TODO: mention which pin the mic is on
 
 The microphone has a DC offset of 1.5V, so it's possible to get full waveform readings from it (as feather ADCs are usually 0-3V)
 
+---
+
 #### Particulate Sensor
 
 ```python
@@ -241,6 +256,8 @@ pms5003 = PMS5003()
 ```
 Import and setup is as above, make sure you have the cable plugged firmly in at both ends. It'll take a little time for the sensor to start up, within a minute or so.
 
+---
+
 ```python
 data = pms5003.read()
 print(data)
@@ -248,6 +265,8 @@ print(data)
 This will print a well formatted summary of all the readings.
 
 The sensor typically send new readings every second.
+
+---
 
 ```python
 reading = pms5003.read()
@@ -260,6 +279,8 @@ print(pm10)
 ```
 Individual values can be accessed by the above methods. If you attempt to access the individual readings by using for example `print(pms5003.read().data[0])`, it will still work, however if you make other readings in a similar fashion it will have to wait for the sensor to send a new reading each time, as opposed to the recommended method above which will use only one reading, and thus all the measurements will occupy the same time slice.
 
+---
+
 #### Proximity and Light
 
 ```python
@@ -271,6 +292,8 @@ ltr559 = LTR559(i2c_dev=i2c_dev)
 ```
 Import and setup is as above. `not_SMBus` is needed as circuitpython does not natively expose the i2c functions that the library expects and requires.
 
+---
+
 ```python
 lux = ltr559.get_lux()
 prox = ltr559.get_proximity()
@@ -279,9 +302,13 @@ print(prox)
 ```
 Light and proximity reading can be obtained using the above methods.
 
+---
+
 Interrupts can be set up similarly to [the proximity interrupt example in the library](https://github.com/pimoroni/ltr559-python/blob/master/examples/proximity-interrupt.py), however circuitpython does not yet have a function for native interrupts at the time of writing.
 
 The LTR-559 interrupt pin is broken out to Pin 24 on the wing.
+
+---
 
 ### Utilities
 
