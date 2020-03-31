@@ -34,7 +34,6 @@ We recommend using [Mu editor](https://codewith.mu/), as it has built-in support
 ## Warning
 The following examples will not work on the M0 boards, due to their limited RAM compared to other CircuitPython Feather boards:
 * `plotter-bme280.py`
-* 
 * `test-all.py`
 
 ## Development
