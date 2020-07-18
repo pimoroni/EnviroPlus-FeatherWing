@@ -1,6 +1,6 @@
 # Enviro+ FeatherWing
 
-[Buy Enviro+ FeatherWing here.](https://shop.pimoroni.com/enviro-plus-featherwing)
+[Buy Enviro+ FeatherWing here.](https://shop.pimoroni.com/products/enviro-plus-featherwing)
 
 Care about air with Enviro+ FeatherWing. It's packed full of environmental sensors that'll get you started in the world of citizen science. Monitor weather, light level, noise pollution, and air quality, in your local area and contribute your data to better understand trends in air pollution.
 
