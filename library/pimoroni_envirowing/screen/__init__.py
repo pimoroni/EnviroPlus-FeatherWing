@@ -14,19 +14,21 @@ def Screen(backlight_control=True, baudrate=100000000, spi=None):
 
     # if not supplied an spi object, make our own
     if not spi:
-        spi = board.SPI() # define which spi bus the screen is on
-    
-    spi.try_lock() # try to get control of the spi bus
-    spi.configure(baudrate=baudrate) # tell the spi bus how fast it's going to run
-    spi.unlock() # unlocks the spi bus so displayio can control it
+        spi = board.SPI()  # define which spi bus the screen is on
 
-    displayio.release_displays() # release any displays that may exist from previous code run
-    
+    spi.try_lock()         # try to get control of the spi bus
+    spi.configure(baudrate=baudrate)  # tell the spi bus how fast it's going to run
+    spi.unlock()           # unlocks the spi bus so displayio can control it
+
+    displayio.release_displays()  # release any displays that may exist from previous code run
+
+    # define the display bus
     if backlight_control:
-        display_bus = displayio.FourWire(spi, command=pimoroni_physical_feather_pins.pin19(), chip_select=pimoroni_physical_feather_pins.pin20(), reset=pimoroni_physical_feather_pins.pin21()) # define the display bus
+        display_bus = displayio.FourWire(spi, command=pimoroni_physical_feather_pins.pin19(), chip_select=pimoroni_physical_feather_pins.pin20(), reset=pimoroni_physical_feather_pins.pin21())
     else:
-        display_bus = displayio.FourWire(spi, command=pimoroni_physical_feather_pins.pin19(), chip_select=pimoroni_physical_feather_pins.pin20()) # define the display bus
+        display_bus = displayio.FourWire(spi, command=pimoroni_physical_feather_pins.pin19(), chip_select=pimoroni_physical_feather_pins.pin20())
 
-    display = ST7735R(display_bus, width=160, height=80, colstart=26, rowstart=1, rotation=270, invert=True) # define the display (these values are specific to the envirowing's screen)
+    # define the display (these values are specific to the envirowing's screen)
+    display = ST7735R(display_bus, width=160, height=80, colstart=26, rowstart=1, rotation=270, invert=True)
 
     return display
