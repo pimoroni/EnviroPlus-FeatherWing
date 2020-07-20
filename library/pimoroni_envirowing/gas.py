@@ -2,6 +2,8 @@ import time, board, digitalio, analogio
 import pimoroni_physical_feather_pins
 
 _is_setup = False
+enable_pin = None
+
 
 class Mics6814Reading(object):
     __slots__ = 'oxidising', 'reducing', 'nh3', "_OX", "_RED", "_NH3"
@@ -27,16 +29,16 @@ NH3: {nh3:05.03f} Ohms"""
 
 
 def setup():
-    global _is_setup, enable, OX, RED, NH3
+    global _is_setup, enable_pin, OX, RED, NH3
     if _is_setup:
         return
     _is_setup = True
 
 
     #enable = digitalio.DigitalInOut(board.A4)
-    enable = digitalio.DigitalInOut(pimoroni_physical_feather_pins.pin9())
-    enable.direction = digitalio.Direction.OUTPUT
-    enable.value = True
+    enable_pin = digitalio.DigitalInOut(pimoroni_physical_feather_pins.pin9())
+    enable_pin.direction = digitalio.Direction.OUTPUT
+    enable_pin.value = True
 
     #OX = analogio.AnalogIn(board.A2)
     OX = analogio.AnalogIn(pimoroni_physical_feather_pins.pin7())
@@ -47,7 +49,8 @@ def setup():
 
 
 def cleanup():
-    enable.value = False
+    if enable_pin is not None:
+        enable_pin.value = False
 
 
 def read_all():
