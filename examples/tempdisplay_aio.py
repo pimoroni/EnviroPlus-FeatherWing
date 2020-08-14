@@ -12,6 +12,20 @@ Two jobs and fulltime college has kept me busy from sharing this, but here you g
 Used with a Feather M4 Express, ESP32 Coprocessor, and Enviro Feather all connected via the Proto Tripler
 
                                                                           ~dedSyn4ps3
+
+**MAKE SURE TO CREATE YOUR OWN SECRETS.PY FILE WITH PROPER CREDENTIALS**
+
+Create a new file named 'secrets.py' in the same directory as your main code, and including the following in
+the exact same structure:
+
+secrets = {
+    'ssid' : 'YOUR ACCESSPOINT',
+    'password' : 'ACCESSPOINT PASSWORD',
+    'timezone' : "America/New_York", # http://worldtimeapi.org/timezones
+    'aio_username' : 'YOUR AIO USERNAME',
+    'aio_key' : 'YOUR AIO KEY',
+    }
+    
 '''
 #----------------------------------------------------------------------------------------------------------------
 
