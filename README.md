@@ -27,8 +27,11 @@ We recommend using [Mu editor](https://codewith.mu/), as it has built-in support
 
 * [CircuitPython 4.x](https://circuitpython.org/downloads) (soon to be 5.x)
 * [Adafruit CircuitPython Library Bundle](https://circuitpython.org/libraries)
-    * Specifically `adafruit_st7735r`, `adafruit_bme280`, `adafruit_bus_device`
-    * Optionally `adafruit_display_text` (needed for the screen and the BME280 logging examples, and if you want to display text on the screen)
+    * Specifically:
+        * `adafruit_bus_device` (directory)
+        * `adafruit_bme280` (.mpy file)
+        * `adafruit_st7735r` (.mpy file)
+    * Optionally `adafruit_display_text` (directory; needed for the screen and the BME280 logging examples, and if you want to display text on the screen)
 * [The latest release of the Enviro+ FeatherWing libraries (this repository!)](../../releases)
 
 ## Warning
