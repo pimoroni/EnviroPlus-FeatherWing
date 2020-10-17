@@ -39,7 +39,7 @@ Plug your Feather board into your computer using a known-good micro-USB cable (c
 
 A drive called CIRCUITPY should mount on your computer. This is where the CircuitPython code and libraries live on your Feather board.
 
-Verify that the version of CircuitPython on your Feather board is compatible with our libraries (see [Dependencies in the Readme](../../blob/master/README.md#dependencies)).
+Verify that the version of CircuitPython on your Feather board is compatible with our libraries (see [Dependencies in the Readme](README.md#dependencies)).
 
 (To check your CircuitPython version, open up the CIRCUITPY drive and check the `boot_out.txt` file)
 
@@ -51,7 +51,7 @@ Follow [these instructions from Adafruit](https://learn.adafruit.com/welcome-to-
 
 #### Installing Adafruit CircuitPython libraries
 
-Follow [these instructions from Adafruit](https://learn.adafruit.com/welcome-to-circuitpython/circuitpython-libraries) to install the correct Adafruit CircuitPython libraries to your board. If your board has limited storage space (usually non-Express Feathers), install only the libraries specified in [Dependencies](../../blob/master/README.md#dependencies).
+Follow [these instructions from Adafruit](https://learn.adafruit.com/welcome-to-circuitpython/circuitpython-libraries) to install the correct Adafruit CircuitPython libraries to your board. If your board has limited storage space (usually non-Express Feathers), install only the libraries specified in [Dependencies](README.md#dependencies).
 
 #### Installing Pimoroni CircuitPython libraries
 
@@ -75,56 +75,56 @@ Things to check:
 ### Examples
 
 #### bme280-simple
-[bme280-simple.py](../../blob/master/examples/bme280-simple.py)
+[bme280_simple.py](examples/bme280_simple.py)
 
 Prints out the readings from the BME280 temperature, pressure, and humidity sensor, along with its estimated altitude calculation.
 
 #### screen
-[screen.py](../../blob/master/examples/screen.py)
+[screen.py](examples/screen.py)
 
 Example of how to draw to the 0.96" LCD, using displayio.
 
 #### gas-sensor
-[gas-sensor.py](../../blob/master/examples/gas-sensor.py)
+[gas_sensor.py](examples/gas_sensor.py)
 
 Prints the readings from the MiCS6814 analog gas sensor once a second.
 
 #### microphone
-[microphone.py](../../blob/master/examples/microphone.py)
+[microphone.py](examples/microphone.py)
 
 Continuously waits for a double clap and prints when it hears one.
 
 Perfect for hacking! Just change the code in `double_clap_function` to whatever you want; toggle an LED, show something on screen, etc.
 
 #### particulate-sensor
-[particulate-sensor.py](../../blob/master/examples/particulate-sensor.py)
+[particulate_sensor.py](examples/particulate_sensor.py)
 
 Prints the readings from the PMS5003 particulate matter sensor as fast as it supplies them (typically around once per second).
 
 Remember to plug the PMS5003 particulate matter sensor into the socket on the underside of the FeatherWing!
 
 #### proximity-and-light
-[proximity-and-light.py](../../blob/master/examples/proximity-and-light.py)
+[proximity_and_light.py](examples/proximity_and_light.py)
 
 Quickly prints out the readings from the LTR-559 proximity and light sensor, and adjusts the screen's backlight according to the ambient light level readings.
 
 #### plotter-bme280
-[plotter-bme280.py](../../blob/master/examples/plotter-bme280.py)
+[plotter_bme280.py](examples/plotter_bme280.py)
 
 Draws a line graph of readings from the BME280 temperature, pressure and humidity sensor on the screen.
 
 #### plotter-gas
-[plotter-gas.py](../../blob/master/examples/plotter-gas.py)
+[plotter_gas.py](examples/plotter_gas.py)
 
 Draws a line graph of readings from the MiCS6814 analog gas sensor on the screen.
 
 #### plotter-light&sound
-[plotter-light&sound.py](../../blob/master/examples/plotter-light&sound.py)
+[plotter_light_and_sound.py](examples/plotter_light_and_sound.py)
 
 Draws a line graph of readings from the LTR-559 light and proximity sensor, and the noise level (determined from microphone readings) on the screen.
 
 #### plotter-particulate
-[plotter-particulate.py](../../blob/master/examples/plotter-particulate.py)
+[plotter_particulate.py](examples/plotter_particulate.py)
 
 Draws a line graph of readings from the PMS5003 particulate matter sensor on the screen.
 
@@ -137,7 +137,7 @@ PM1.0 readings are not shown by default as there is no standard to compare to at
 Remember to plug the PMS5003 particulate matter sensor into the socket on the underside of the FeatherWing!
 
 #### plotters-combined
-[plotters-combined.py](../../blob/master/examples/plotters-combined.py)
+[plotters_combined.py](examples/plotters_combined.py)
 
 Combines all of the separate plotter examples into one!
 
@@ -146,7 +146,7 @@ You can switch page by waving your hand over the proximity sensor for one second
 If the particulate matter sensor isn't plugged in, it'll just skip it and still work.
 
 #### test-all
-[test-all.py](../../blob/master/examples/test-all.py)
+[test_all.py](examples/test_all.py)
 
 Runs a full self-test.
 
@@ -360,4 +360,4 @@ These will be coloured in the same order you define the colours in the setup. So
 
 The number of colours you define in setup must be equal to, or more than, the number of readings you make in `update`.
 
-More advanced usage can be found in [the plotter examples](#plotter-bme280), and [the plotter code itself](../../blob/master/library/pimoroni_envirowing/screen/plotter.py).
+More advanced usage can be found in [the plotter examples](#plotter-bme280), and [the plotter code itself](library/pimoroni_envirowing/screen/plotter.py).
