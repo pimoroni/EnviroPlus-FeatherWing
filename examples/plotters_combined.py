@@ -4,13 +4,13 @@ plotters-combined.py
 Combines all the plotters into one program, recording values over a 24hr period (by default).
 Allows you to switch page by waving your hand over the screen.
 """
-interval = 540 # full screen of reading spans 24hrs
-#interval = 1 # uncomment for 1 reading per second
-#interval = 60 # uncomment for 1 reading per minute
-#interval = 3600 # uncomment for 1 reading per hour
+# interval = 540 # full screen of reading spans 24hrs
+interval = 1  # uncomment for 1 reading per second
+# interval = 60 # uncomment for 1 reading per minute
+# interval = 3600 # uncomment for 1 reading per hour
 
 # the higher the threshold value the less sensitive, we've found this to be a good default through testing
-mic_threshold = 3100 
+mic_threshold = 3100
 
 # the threshold for the proximity detection, the higher the less sensitive
 prox_threshold = 100
@@ -36,7 +36,7 @@ from pimoroni_envirowing.screen import plotter
 from pimoroni_ltr559 import LTR559
 from pimoroni_pms5003 import PMS5003
 
-#print("(", gc.mem_free(), ")")
+print(f"initial memory: {gc.mem_free():,}")
 
 # set up the connection with the bme280
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -66,7 +66,7 @@ screen = screen.Screen(backlight_control=False)
 pwm = pulseio.PWMOut(pimoroni_physical_feather_pins.pin21())
 
 # start the screen at 50% brightness
-pwm.duty_cycle = 2**15
+pwm.duty_cycle = 2 ** 15
 
 # set up mic input
 mic = analogio.AnalogIn(pimoroni_physical_feather_pins.pin8())
@@ -78,31 +78,38 @@ blue = 0x0000FF
 
 # Setup bme280 screen plotter
 # the max value is set to 70 as it is the screen height in pixels after the labels (top_space) (this is just to make a calculation later on easier)
-bme280_splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue], max_value=70, min_value=0, top_space=10, display=screen)
+bme280_splotter = plotter.ScreenPlotter([red, green, blue, red + green + blue], max_value=70, min_value=0, top_space=10,
+                                        display=screen)
 
 # add a colour coded text label for each reading
-bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} C".format(bme280.temperature), color=red, x=0, y=5, max_glyphs=15))
-bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} hPa".format(bme280.pressure), color=green, x=50, y=5, max_glyphs=15))
-bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.1f} %".format(bme280.humidity), color=blue, x=120, y=5, max_glyphs=15))
-#bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.2f} m".format(bme280.altitude), color=red+green+blue, x=40, y=20, max_glyphs=15)) # uncomment for altitude estimation
+bme280_splotter.group.append(
+    label.Label(terminalio.FONT, text="{:0.1f} C".format(bme280.temperature), color=red, x=0, y=5, max_glyphs=15))
+bme280_splotter.group.append(
+    label.Label(terminalio.FONT, text="{:0.1f} hPa".format(bme280.pressure), color=green, x=50, y=5, max_glyphs=15))
+bme280_splotter.group.append(
+    label.Label(terminalio.FONT, text="{:0.1f} %".format(bme280.humidity), color=blue, x=120, y=5, max_glyphs=15))
+# bme280_splotter.group.append(label.Label(terminalio.FONT, text="{:0.2f} m".format(bme280.altitude), color=red+green+blue, x=40, y=20, max_glyphs=15)) # uncomment for altitude estimation
 
 # if the pms5003 is connected
 if is_pms5003:
     # Set up the pms5003 screen plotter
     # the max value is set to 1000 as a nice number to work with
-    pms5003_splotter = plotter.ScreenPlotter([green, blue, red+blue+green], max_value=1000, min_value=0, top_space=10, display=screen)
+    pms5003_splotter = plotter.ScreenPlotter([green, blue, red + blue + green], max_value=1000, min_value=0,
+                                             top_space=10, display=screen)
 
     # add a colour coded text label for each reading
-    pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5, max_glyphs=15))
+    pms5003_splotter.group.append(
+        label.Label(terminalio.FONT, text="PM2.5: {:d}", color=green, x=0, y=5, max_glyphs=15))
     pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM10: {:d}", color=blue, x=80, y=5, max_glyphs=15))
-    #pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM1.0: {:d}", color=red, x=0, y=20, max_glyphs=15)) # uncomment to enable PM1.0 measuring
+    # pms5003_splotter.group.append(label.Label(terminalio.FONT, text="PM1.0: {:d}", color=red, x=0, y=20, max_glyphs=15)) # uncomment to enable PM1.0 measuring
 
     # red line for the WHO guideline (https://en.wikipedia.org/wiki/Air_quality_guideline)
     # made in a new bitmap so it doesn't get overwritten
     pms5003_splotter.redline_bm = displayio.Bitmap(160, 1, 1)
     pms5003_splotter.redline_pl = displayio.Palette(1)
     pms5003_splotter.redline_pl[0] = red
-    pms5003_splotter.redline_tg = displayio.TileGrid(pms5003_splotter.redline_bm, pixel_shader=pms5003_splotter.redline_pl, x=0, y=44)
+    pms5003_splotter.redline_tg = displayio.TileGrid(pms5003_splotter.redline_bm,
+                                                     pixel_shader=pms5003_splotter.redline_pl, x=0, y=44)
     pms5003_splotter.group.append(pms5003_splotter.redline_tg)
 
 # Set up the gas screen plotter
@@ -114,6 +121,7 @@ gas_splotter.group.append(label.Label(terminalio.FONT, text="OX: {:.0f}", color=
 gas_splotter.group.append(label.Label(terminalio.FONT, text="RED: {:.0f}", color=green, x=50, y=5, max_glyphs=15))
 gas_splotter.group.append(label.Label(terminalio.FONT, text="NH3: {:.0f}", color=blue, x=110, y=5, max_glyphs=15))
 
+
 # from https://stackoverflow.com/a/49955617
 def human_format(num, round_to=0):
     magnitude = 0
@@ -121,6 +129,7 @@ def human_format(num, round_to=0):
         magnitude += 1
         num = round(num / 1000.0, round_to)
     return '{:.{}f}{}'.format(round(num, round_to), round_to, ['', 'K', 'M', 'G', 'T', 'P'][magnitude])
+
 
 # set up the light&sound plotter
 lightandsound_splotter = plotter.ScreenPlotter([green, blue], display=screen, max_value=1, top_space=10)
@@ -146,9 +155,10 @@ available_pages = {
 
 # if pms5003 detected, add to available pages
 if is_pms5003:
-    available_pages.update({0:pms5003_splotter})
+    available_pages.update({0: pms5003_splotter})
 
 current_page = 3
+
 
 # create a generator that will give the next page index, looping back to 0 once it reaches the end
 def page_turner(available_pages):
@@ -156,10 +166,11 @@ def page_turner(available_pages):
         for i in sorted(available_pages.keys()):
             yield i
 
+
 # init the generator
 page = page_turner(available_pages)
 
-#print("(", gc.mem_free(), ")")
+print(f"post generator: {gc.mem_free():,}")
 
 while True:
     # if 1 second has passed
@@ -177,16 +188,16 @@ while True:
             available_pages[current_page].draw(full_refresh=True)
         else:
             # change screen brightness according to the amount of light detected
-            pwm.duty_cycle = int(min(lightandsound_splotter.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
+            pwm.duty_cycle = int(min(lightandsound_splotter.remap(lux, 0, 400, 0, (2 ** 16 - 1)), (2 ** 16 - 1)))
 
         # if interval time has passed since last reading
         if last_reading + interval < time.monotonic():
-            
+
             # take readings
             temperature = bme280.temperature
             pressure = bme280.pressure
             humidity = bme280.humidity
-            #altitude = bme280.altitude # uncomment for altitude estimation
+            # altitude = bme280.altitude # uncomment for altitude estimation
 
             # update the line graph
             bme280_splotter.update(
@@ -194,7 +205,7 @@ while True:
                 bme280_splotter.remap(temperature, 0, 50, 0, 70),
                 bme280_splotter.remap(pressure, 975, 1025, 0, 70),
                 bme280_splotter.remap(humidity, 0, 100, 0, 70),
-                #bme280_splotter.remap(altitude, 0, 1000, 0, 70), # uncomment for altitude estimation
+                # bme280_splotter.remap(altitude, 0, 1000, 0, 70), # uncomment for altitude estimation
                 draw=False
             )
 
@@ -202,7 +213,7 @@ while True:
             bme280_splotter.group[1].text = "{:0.1f} C".format(temperature)
             bme280_splotter.group[2].text = "{:0.1f} hPa".format(pressure)
             bme280_splotter.group[3].text = "{:0.1f} %".format(humidity)
-            #bme280_splotter.group[4].text = "{:0.2f} m".format(altitude) # uncomment for altitude estimation
+            # bme280_splotter.group[4].text = "{:0.2f} m".format(altitude) # uncomment for altitude estimation
 
             gc.collect()
 
@@ -212,9 +223,9 @@ while True:
             # update the line graph
             # the value plotted on the graph is the voltage drop over each sensor, not the resistance, as it graphs nicer
             gas_splotter.update(
-                gas_reading._OX.value * (gas_reading._OX.reference_voltage/65535),
-                gas_reading._RED.value * (gas_reading._RED.reference_voltage/65535),
-                gas_reading._NH3.value * (gas_reading._NH3.reference_voltage/65535),
+                gas_reading._OX.value * (gas_reading._OX.reference_voltage / 65535),
+                gas_reading._RED.value * (gas_reading._RED.reference_voltage / 65535),
+                gas_reading._NH3.value * (gas_reading._NH3.reference_voltage / 65535),
                 draw=False
             )
 
@@ -226,11 +237,11 @@ while True:
             gc.collect()
 
             # get the sound readings (number of samples over the threshold / total number of samples taken) and apply a logarithm function to them to represent human hearing
-            sound_level = math.log((reading/readings) + 1, 2)
+            sound_level = math.log((reading / readings) + 1, 2)
             # weight the result using a -2x^3 + 3x^2 curve to emphasise changes around the midpoint (0.5)
-            sound_level = (-2* sound_level**3 + 3* sound_level**2)
+            sound_level = (-2 * sound_level ** 3 + 3 * sound_level ** 2)
             # then weight the result using a x^3 - 3x^2 + 3x curve to make the results fill the graph and not sit at the bottom
-            sound_level = (sound_level**3 - 3*sound_level**2 + 3*sound_level)
+            sound_level = (sound_level ** 3 - 3 * sound_level ** 2 + 3 * sound_level)
 
             # update the line graph
             lightandsound_splotter.update(
@@ -250,21 +261,21 @@ while True:
                 pms_reading = pms5003.read()
                 pm2 = pms_reading.data[1]
                 pm10 = pms_reading.data[2]
-                #pm1 = pms_reading.data[0] # uncomment to enable PM1.0 measuring
+                # pm1 = pms_reading.data[0] # uncomment to enable PM1.0 measuring
 
                 # update the line graph
                 pms5003_splotter.update(
                     pms5003_splotter.remap(pm2, 0, 50, 0, 1000),
                     pms5003_splotter.remap(pm10, 0, 100, 0, 1000),
-                    #pms5003_splotter.remap(pm1, 0, 100, 0, 1000), # uncomment to enable PM1.0 measuring
+                    # pms5003_splotter.remap(pm1, 0, 100, 0, 1000), # uncomment to enable PM1.0 measuring
                     draw=False
                 )
 
                 # update the labels
                 pms5003_splotter.group[1].text = "PM2.5: {:d}".format(pm2)
                 pms5003_splotter.group[2].text = "PM10: {:d}".format(pm10)
-                #pms5003_splotter.group[3].text = "PM1.0: {:d}".format(pm1) # uncomment to enable PM1.0 measuring
-                
+                # pms5003_splotter.group[3].text = "PM1.0: {:d}".format(pm1) # uncomment to enable PM1.0 measuring
+
                 gc.collect()
 
             available_pages[current_page].draw()
@@ -275,8 +286,8 @@ while True:
             # record the time that this reading was taken
             last_reading = time.monotonic()
 
-            #print("(", gc.mem_free(), ")")
-        
+            print(f"time:{time.monotonic():,}, free memory {gc.mem_free():,}")
+
         # update the last_sec time
         last_sec = time.monotonic()
 
