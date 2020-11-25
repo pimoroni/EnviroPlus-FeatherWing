@@ -36,12 +36,12 @@ We recommend using [Mu editor](https://codewith.mu/), as it has built-in support
 
 ## Warning
 The following examples will not work on the M0 boards, due to their limited RAM compared to other CircuitPython Feather boards:
-* `plotter-bme280.py`
-* `plotter-gas.py`
-* `plotter-light&sound.py`
-* `plotter-particulate.py`
-* `plotters-combined.py`
-* `test-all.py`
+* `plotter_bme280.py`
+* `plotter_gas.py`
+* `plotter_light_and_sound.py`
+* `plotter_particulate.py`
+* `plotters_combined.py`
+* `test_all.py`
 
 ## Development
 To clone the repository, please use `git clone` with the option `--recurse-submodules`, otherwise not all the libraries will be downloaded. Do not download the zip as this will not contain all the libraries either.
