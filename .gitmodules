@@ -3,7 +3,7 @@
 	url = https://github.com/pimoroni/pms5003-circuitpython
 [submodule "submodules/circuitpython_adapter"]
 	path = submodules/circuitpython_adapter
-	url = https://github.com/pimoroni//circuitpython_adapter
+	url = https://github.com/pimoroni/circuitpython_adapter
 [submodule "submodules/physical_feather_pins"]
 	path = submodules/physical_feather_pins
 	url = https://github.com/pimoroni/physical_feather_pins
