@@ -110,6 +110,11 @@ class ScreenPlotter:
             self.draw()
 
     def draw(self, full_refresh=False):
+        restore_auto_refresh = False
+        if self.display.auto_refresh:
+            self.display.auto_refresh = False
+            restore_auto_refresh = True
+
         if not full_refresh:
             if len(self.data_points) > self.bitmap.width:
                 difflen = len(self.data_points) - self.bitmap.width
@@ -152,4 +157,6 @@ class ScreenPlotter:
                         self.bitmap[index, round(self.remap(point, self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
             except IndexError:
                 print("You shouldn't call draw() without calling update() first")
-        self.display.show(self.group)
+
+        if restore_auto_refresh:
+            self.display.auto_refresh = True
