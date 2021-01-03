@@ -30,6 +30,14 @@ green = 0x00FF00
 blue = 0x0000FF
 
 
+def timeit(func):
+    after = 0
+    before = time.monotonic_ns()
+    func()
+    after = time.monotonic_ns()
+    return (after - before) / 1e9
+
+
 def test_fourlines(name, full_refresh=False):
     test_splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue],
                                           min_value=0, max_value=100, top_space=10+10,
@@ -57,7 +65,7 @@ def test_fourlines(name, full_refresh=False):
                              50,
                              draw=not full_refresh)
         if full_refresh:
-            test_splotter.draw(full_refresh)
+            test_splotter.draw(full_refresh=full_refresh)
 
 
 def test_threeflatlines(name, full_refresh=False):
@@ -77,16 +85,59 @@ def test_threeflatlines(name, full_refresh=False):
                              draw=not full_refresh)
 
         if full_refresh:
-            test_splotter.draw(full_refresh)
+            test_splotter.draw(full_refresh=full_refresh)
+
+
+def test_twolinesfewdraws(name, full_refresh=False):
+    """Only issue a draw every 4 updates to see how library handles it.
+       Current implementation (Dec-2020) misses pixels until it starts scrolling.
+    """
+    test_splotter = plotter.ScreenPlotter([red+green, green+blue],
+                                          min_value=0, max_value=1000, top_space=10+10,
+                                          display=screen)
+
+    test_splotter.group.append(label.Label(terminalio.FONT,
+                                           text=name + (" CLS" if full_refresh else ""),
+                                           color=0xffffff, x=0, y=5))
+
+    for idx in range(200):
+        time.sleep(0.050)
+        test_splotter.update((idx * 50 + 20) % 1001,
+                             (idx * 2 + 300) % 1001,
+                             draw=False)
+        if idx % 4 == 0:
+            test_splotter.draw(full_refresh=full_refresh)
 
 
 # full_refresh is currently (Dec-2020) very slow and very flickery unless
 # data update rate is very low
-test_fourlines("Four lines, 3 ramping")
+screen_name = "Four lines, 3 ramping"
+print(screen_name, "took",
+      timeit(lambda: test_fourlines(screen_name)),
+      "seconds")
 time.sleep(10)
-test_fourlines("Four lines, 3 ramping", full_refresh=True)
+print(screen_name, "took",
+      timeit(lambda: test_fourlines(screen_name, full_refresh=True)),
+      "seconds")
 time.sleep(15)
-test_threeflatlines("Three flat lines")
+
+screen_name = "Three flat lines"
+print(screen_name, "took",
+      timeit(lambda: test_threeflatlines(screen_name)),
+      "seconds")
 time.sleep(10)
-test_threeflatlines("Three flat lines", full_refresh=True)
+print(screen_name, "took",
+      timeit(lambda: test_threeflatlines(screen_name, full_refresh=True)),
+      "seconds")
+time.sleep(15)
+
+
+screen_name = "Two lines, few draws"
+print(screen_name, "took",
+      timeit(lambda: test_twolinesfewdraws(screen_name)),
+      "seconds")
+time.sleep(10)
+print(screen_name, "took",
+      timeit(lambda: test_twolinesfewdraws(screen_name, full_refresh=True)),
+      "seconds")
 time.sleep(15)
