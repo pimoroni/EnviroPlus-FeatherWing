@@ -144,9 +144,7 @@ class ScreenPlotter:
                     self.data_points = self.data_points[difflen:]
 
                 # clear bitmap
-                for x in range(self.bitmap.width):
-                    for y in range(self.bitmap.height):
-                        self.bitmap[x, y] = 0
+                self.bitmap.fill(0)
 
                 for index, value in enumerate(self.data_points):
                     for subindex, point in enumerate(value):
