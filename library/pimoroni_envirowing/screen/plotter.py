@@ -133,8 +133,9 @@ class ScreenPlotter:
                         if point != 0:
                             # self.bitmap[index,round(((old_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = 0
                             self.bitmap[index, round(self.remap(self.old_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = 0
-                            # self.bitmap[index,round(((self.data_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
-                            self.bitmap[index, round(self.remap(self.data_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
+                    for subindex, point in enumerate(value):
+                        # self.bitmap[index,round(((self.data_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
+                        self.bitmap[index, round(self.remap(self.data_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1                 
             else:
                 try:
                     for subindex, point in enumerate(self.data_points[-1]):
