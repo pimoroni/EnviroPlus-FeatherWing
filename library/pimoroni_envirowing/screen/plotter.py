@@ -1,5 +1,6 @@
 class ScreenPlotter:
-    def __init__(self, colours, bg_colour=None, max_value=None, min_value=None, display=None, top_space=None):
+    def __init__(self, colours, bg_colour=None, max_value=None, min_value=None,
+                 display=None, top_space=None, width=None, height=None):
         """__init__
 
         :param list colours: a list of colours to use for data lines
@@ -25,11 +26,15 @@ class ScreenPlotter:
 
         self.num_colours = len(colours) + 1
 
+        plot_width = display.width if width is None else width
+        plot_height = display.height if height is None else height
         if top_space:
-            self.bitmap = displayio.Bitmap(160, 80 - top_space, self.num_colours)
+            self.bitmap = displayio.Bitmap(plot_width, plot_height - top_space,
+                                           self.num_colours)
             self.top_offset = top_space
         else:
-            self.bitmap = displayio.Bitmap(160, 80, self.num_colours)
+            self.bitmap = displayio.Bitmap(plot_width, plot_height,
+                                           self.num_colours)
             self.top_offset = 0
 
         self.palette = displayio.Palette(self.num_colours)
@@ -135,7 +140,7 @@ class ScreenPlotter:
                             self.bitmap[index, round(self.remap(self.old_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = 0
                     for subindex, point in enumerate(value):
                         # self.bitmap[index,round(((self.data_points[index][subindex] - self.min_value) / self.value_range) * -(self.bitmap.height -1) + (self.bitmap.height -1))] = subindex + 1
-                        self.bitmap[index, round(self.remap(self.data_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1                 
+                        self.bitmap[index, round(self.remap(self.data_points[index][subindex], self.min_value, self.max_value, self.bitmap.height - 1, 0))] = subindex + 1
             else:
                 try:
                     for subindex, point in enumerate(self.data_points[-1]):
