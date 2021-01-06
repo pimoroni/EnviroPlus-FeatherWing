@@ -102,13 +102,17 @@ def test_twolinesfewdraws(name, full_refresh=False):
                                            color=0xffffff, x=0, y=5))
     screen.show(test_splotter.group)
 
-    for idx in range(200):
+    for idx in range(200 + 32):
         time.sleep(0.050)
         test_splotter.update((idx * 50 + 20) % 1001,
                              (idx * 2 + 300) % 1001,
                              draw=False)
-        if idx % 4 == 0:
+        # draw every 4 columns for first 200 columns but skip after that to
+        # test going beyond internal circular buffer size
+        if idx % 4 == 0 and idx < 200:
             test_splotter.draw(full_refresh=full_refresh)
+
+    test_splotter.draw(full_refresh=full_refresh)
 
 
 def test_altandmiss(name, full_refresh=False):

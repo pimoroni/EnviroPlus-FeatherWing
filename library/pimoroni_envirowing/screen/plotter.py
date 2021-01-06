@@ -1,7 +1,7 @@
 class ScreenPlotter:
     def __init__(self, colours, bg_colour=None, max_value=None, min_value=None,
                  display=None, top_space=None, width=None, height=None,
-                 extra_data=16, auto_show=True):
+                 extra_data=16, auto_show=True, auto_discard=True):
         """__init__
 
         :param list colours: a list of colours to use for data lines
@@ -23,6 +23,8 @@ class ScreenPlotter:
         :param int extra_data: the number of updates that can be applied before a draw (16 if not supplied)
 
         :param bool auto_show: invoke show on the displayio object here and per execution of draw() (default True)
+
+        :param bool auto_discard: discard values which would over fill data_points (True)
         """
         import displayio
 
@@ -56,7 +58,9 @@ class ScreenPlotter:
         for i, j in enumerate(colours):
             self.palette[i + 1] = j
 
-        self.tile_grid = displayio.TileGrid(self.bitmap, pixel_shader=self.palette, y=self.top_offset)
+        self.tile_grid = displayio.TileGrid(self.bitmap,
+                                            pixel_shader=self.palette,
+                                            y=self.top_offset)
         self.group = displayio.Group(max_size=12)
         self.group.append(self.tile_grid)
 
@@ -76,7 +80,7 @@ class ScreenPlotter:
 
         self.value_range = self.max_value - self.min_value
 
-        # The extra list element is a gap used for this implementation
+        # the extra list element is a gap used for this implementation
         # of a circular buffer
         self.data_len = plot_width + extra_data + 1
         self.data_points = [None] * self.data_len
@@ -84,6 +88,7 @@ class ScreenPlotter:
         self.data_tail = 0
         self.display_tail = 0
         self.displayed_points = 0
+        self.auto_discard = auto_discard
 
     def remap(self, value, old_min, old_max, new_min, new_max):
         return (((value - old_min) * (new_max - new_min)) / (old_max - old_min)) + new_min
@@ -98,7 +103,11 @@ class ScreenPlotter:
         values = list(values)
 
         if self.data_tail == (self.data_head - 1) % self.data_len:
-            raise OverflowError("data_points full")
+            if self.auto_discard:
+                self.data_head = (self.data_tail - self.bitmap.width) % self.data_len
+                self.displayed_points = 0  # trigger a full_refresh
+            else:
+                raise OverflowError("data_points full")
 
         if len(values) > self.num_colours - 1:
             raise OverflowError("The list of values shouldn't have more entries than the list of colours")
@@ -138,12 +147,18 @@ class ScreenPlotter:
         heightm1 = self.bitmap.height - 1
         if num_points > self.bitmap.width:
             # scrolling
-            if not full_refresh:
+            if not full_refresh and self.displayed_points == self.bitmap.width:
                 for index, dpnew_index in zip(range(self.bitmap.width),
                                               range(self.data_tail - self.bitmap.width, self.data_tail)):
                     # undraw old pixels if they were in a different position
-                    old_values = self.data_points[self.display_tail - self.displayed_points + index] if index < self.displayed_points else []
-                    for old_value in old_values:
+                    old_values = (self.data_points[self.display_tail - self.displayed_points + index]
+                                  if index < self.displayed_points else [])
+                    for subindex, old_value in enumerate(old_values):
+                        try:
+                            if old_value == self.data_points[dpnew_index][subindex]:
+                                continue
+                        except IndexError:
+                            pass  # this is ok as there may be more old values than new
                         self.bitmap[index, round(self.remap(old_value, self.min_value, self.max_value, heightm1, 0))] = 0
 
                     # draw new pixels - this must be performed unconditionally
@@ -175,6 +190,6 @@ class ScreenPlotter:
         if restore_auto_refresh:
             self.display.auto_refresh = True
 
-        # Slightly inefficient and generally unnecessary to show() per draw
+        # slightly inefficient and generally unnecessary to show() per draw
         if show or self.auto_show:
             self.display.show(self.group)
