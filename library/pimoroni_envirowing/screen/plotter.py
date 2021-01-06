@@ -37,8 +37,8 @@ class ScreenPlotter:
 
         self.num_colours = len(colours) + 1
 
-        plot_width = display.width if width is None else width
-        plot_height = display.height if height is None else height
+        plot_width = self.display.width if width is None else width
+        plot_height = self.display.height if height is None else height
         if top_space:
             self.bitmap = displayio.Bitmap(plot_width, plot_height - top_space,
                                            self.num_colours)
