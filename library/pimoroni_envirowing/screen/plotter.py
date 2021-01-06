@@ -31,7 +31,6 @@ class ScreenPlotter:
         else:
             self.display = display
 
-        self.num_lines = len(colours)
         self.num_colours = len(colours) + 1
 
         plot_width = display.width if width is None else width
@@ -99,8 +98,8 @@ class ScreenPlotter:
         if self.data_tail == (self.data_head - 1) % self.data_len:
             raise OverflowError("data_points full")
 
-        if len(values) != self.num_lines:
-            raise Exception("The list of values should match the number of colours")
+        if len(values) > self.num_colours - 1:
+            raise OverflowError("The list of values shouldn't have more entries than the list of colours")
 
         for i, j in enumerate(values):
             if j > self.max_value:
@@ -139,10 +138,10 @@ class ScreenPlotter:
                 for index, dpnew_index in zip(range(self.bitmap.width),
                                               range(self.data_tail - self.bitmap.width, self.data_tail)):
                     # undraw old pixels if they were in a different position
-                    for subindex, new_value in enumerate(self.data_points[dpnew_index]):
-                        old_values = self.data_points[self.display_tail - self.displayed_points + index] if index < self.displayed_points else None
-                        if old_values is not None and old_values[subindex] != new_value:
-                            self.bitmap[index, round(self.remap(old_values[subindex], self.min_value, self.max_value, heightm1, 0))] = 0
+                    old_values = self.data_points[self.display_tail - self.displayed_points + index] if index < self.displayed_points else []
+                    for old_value in old_values:
+                        self.bitmap[index, round(self.remap(old_value, self.min_value, self.max_value, heightm1, 0))] = 0
+
                     # draw new pixels - this must be performed unconditionally
                     # to cater for overlapping lines
                     for subindex, new_value in enumerate(self.data_points[dpnew_index]):

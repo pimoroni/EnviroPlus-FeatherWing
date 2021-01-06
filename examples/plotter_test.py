@@ -109,6 +109,33 @@ def test_twolinesfewdraws(name, full_refresh=False):
             test_splotter.draw(full_refresh=full_refresh)
 
 
+def test_altandmiss(name, full_refresh=False):
+    """Draw three lines which alternate values to allow visual check on scrolling.
+       Also misses values on third line.
+    """
+    test_splotter = plotter.ScreenPlotter([red+green, green+blue, red+(blue>>1)],
+                                          top_space=10+10,
+                                          display=screen)
+
+    test_splotter.group.append(label.Label(terminalio.FONT,
+                                           text=name + (" CLS" if full_refresh else ""),
+                                           color=0xffffff, x=0, y=5))
+
+
+    for idx in range(180):
+        if idx >= 140:
+            time.sleep(0.25)
+
+        values = [40960 - idx % 2 * 2048,
+                  24576 + idx % 4 * 1024]
+        if idx % 4 >= 2:
+            values.append(32768)
+        test_splotter.update(*values,
+                             draw=not full_refresh)
+        if full_refresh:
+            test_splotter.draw(full_refresh=full_refresh)
+
+
 # full_refresh is currently (Dec-2020) very slow and very flickery unless
 # data update rate is very low
 screen_name = "Four lines, 3 ramping"
@@ -131,7 +158,6 @@ print(screen_name, "took",
       "seconds")
 time.sleep(15)
 
-
 screen_name = "Two lines, few draws"
 print(screen_name, "took",
       timeit(lambda: test_twolinesfewdraws(screen_name)),
@@ -139,5 +165,15 @@ print(screen_name, "took",
 time.sleep(10)
 print(screen_name, "took",
       timeit(lambda: test_twolinesfewdraws(screen_name, full_refresh=True)),
+      "seconds")
+time.sleep(15)
+
+screen_name = "Alternating, missing"
+print(screen_name, "took",
+      timeit(lambda: test_altandmiss(screen_name)),
+      "seconds")
+time.sleep(10)
+print(screen_name, "took",
+      timeit(lambda: test_altandmiss(screen_name, full_refresh=True)),
       "seconds")
 time.sleep(15)
