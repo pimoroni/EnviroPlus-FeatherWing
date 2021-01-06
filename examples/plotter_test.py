@@ -41,7 +41,7 @@ def timeit(func):
 def test_fourlines(name, full_refresh=False):
     test_splotter = plotter.ScreenPlotter([red, green, blue, red+green+blue],
                                           min_value=0, max_value=100, top_space=10+10,
-                                          display=screen)
+                                          display=screen, auto_show=False)
 
     # add a colour coded text label for each reading
     test_splotter.group.append(label.Label(terminalio.FONT,
@@ -56,6 +56,7 @@ def test_fourlines(name, full_refresh=False):
     test_splotter.group.append(label.Label(terminalio.FONT,
                                            text=name + (" CLS" if full_refresh else ""),
                                            color=0xffffff, x=0, y=5))
+    screen.show(test_splotter.group)
 
     for idx in range(200):
         time.sleep(0.050)
@@ -94,11 +95,12 @@ def test_twolinesfewdraws(name, full_refresh=False):
     """
     test_splotter = plotter.ScreenPlotter([red+green, green+blue],
                                           min_value=0, max_value=1000, top_space=10+10,
-                                          display=screen)
+                                          display=screen, auto_show=False)
 
     test_splotter.group.append(label.Label(terminalio.FONT,
                                            text=name + (" CLS" if full_refresh else ""),
                                            color=0xffffff, x=0, y=5))
+    screen.show(test_splotter.group)
 
     for idx in range(200):
         time.sleep(0.050)
@@ -115,12 +117,12 @@ def test_altandmiss(name, full_refresh=False):
     """
     test_splotter = plotter.ScreenPlotter([red+green, green+blue, red+(blue>>1)],
                                           top_space=10+10,
-                                          display=screen)
+                                          display=screen, auto_show=False)
 
     test_splotter.group.append(label.Label(terminalio.FONT,
                                            text=name + (" CLS" if full_refresh else ""),
                                            color=0xffffff, x=0, y=5))
-
+    screen.show(test_splotter.group)
 
     for idx in range(180):
         if idx >= 140:

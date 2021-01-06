@@ -1,7 +1,7 @@
 class ScreenPlotter:
     def __init__(self, colours, bg_colour=None, max_value=None, min_value=None,
                  display=None, top_space=None, width=None, height=None,
-                 extra_data=16):
+                 extra_data=16, auto_show=True):
         """__init__
 
         :param list colours: a list of colours to use for data lines
@@ -21,6 +21,8 @@ class ScreenPlotter:
         :param int height: the height in pixels of the plot (uses display width if not supplied)
 
         :param int extra_data: the number of updates that can be applied before a draw (16 if not supplied)
+
+        :param bool auto_show: invoke show on the displayio object here and per execution of draw() (default True)
         """
         import displayio
 
@@ -55,12 +57,12 @@ class ScreenPlotter:
             self.palette[i + 1] = j
 
         self.tile_grid = displayio.TileGrid(self.bitmap, pixel_shader=self.palette, y=self.top_offset)
-
         self.group = displayio.Group(max_size=12)
-
         self.group.append(self.tile_grid)
 
-        self.display.show(self.group)
+        self.auto_show = auto_show
+        if self.auto_show:
+            self.display.show(self.group)
 
         if max_value:
             self.max_value = max_value
@@ -113,11 +115,13 @@ class ScreenPlotter:
         if draw:
             self.draw()
 
-    def draw(self, full_refresh=False):
+    def draw(self, full_refresh=False, show=False):
         """draw
 
         :param bool full_refresh: select clear bitmap algorithm when scrolling,
                                   default is to undraw individual prevously drawn pixels
+
+        :param bool show: force show on the displayio object (default False)
         """
         new_points = (self.data_tail - self.display_tail if self.data_tail >= self.display_tail
                       else self.data_len - self.display_tail + self.data_tail)
@@ -170,3 +174,7 @@ class ScreenPlotter:
 
         if restore_auto_refresh:
             self.display.auto_refresh = True
+
+        # Slightly inefficient and generally unnecessary to show() per draw
+        if show or self.auto_show:
+            self.display.show(self.group)
