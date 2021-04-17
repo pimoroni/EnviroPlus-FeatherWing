@@ -67,7 +67,7 @@ except Exception as e:
 try:
     scd30 = SCD30(i2c)
     is_scd30 = True
-except (ValueError, OSError) as ex:
+except (NameError, ValueError, OSError) as ex:
     print(ex)
     print("You probably don't have an scd30 connected, continuing without CO2 logging")
     is_scd30 = False
