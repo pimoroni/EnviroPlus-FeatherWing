@@ -203,7 +203,7 @@ while True:
         # if proximity confidence above threshold, change page
         if prox > prox_threshold:
             current_page = next(page)
-            available_pages[current_page].draw(full_refresh=True)
+            available_pages[current_page].draw(full_refresh=True, show=True)
         else:
             # change screen brightness according to the amount of light detected
             pwm.duty_cycle = int(min(lightandsound_splotter.remap(lux, 0, 400, 0, (2**16 - 1)), (2**16 - 1)))
