@@ -134,7 +134,7 @@ class ScreenPlotter:
         """
         new_points = (self.data_tail - self.display_tail if self.data_tail >= self.display_tail
                       else self.data_len - self.display_tail + self.data_tail)
-        if new_points == 0:
+        if new_points == 0 and not full_refresh and not show:
             return
 
         restore_auto_refresh = False
