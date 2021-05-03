@@ -65,7 +65,9 @@ except Exception as e:
 
 # set up the scd30
 try:
-    scd30 = SCD30(i2c)
+    pressure = bme280.pressure
+    last_pressure = round(pressure)
+    scd30 = SCD30(i2c, ambient_pressure=last_pressure)
     is_scd30 = True
 except (NameError, ValueError, OSError) as ex:
     print(ex)
@@ -298,6 +300,9 @@ while True:
 
             if is_scd30:
                 # take readings
+                if last_pressure != round(pressure):
+                    last_pressure = round(pressure)
+                    scd30.ambient_pressure = last_pressure
                 co2ppm = scd30.CO2
                 scd30_splotter.update(co2ppm,
                                       draw=False)
