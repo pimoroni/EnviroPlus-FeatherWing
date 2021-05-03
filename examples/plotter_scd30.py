@@ -27,6 +27,14 @@ blue = 0x0000FF
 # set up the sensor
 scd30 = SCD30(board.I2C())
 
+# The SCD-30 is more accurate if given local air pressure in mb (hPa)
+# which is available from the BME280 on the Enviro+ FeatherWing
+# The altitude in metres is a less accurate way of compensating for pressure
+# The altitude is remembered if the power is removed and is best set
+# only when needed to avoid wear on SCD-30 NVRAM
+#scd30.ambient_pressure = 1021
+#scd30.altitude = 123
+
 # Set up the plotter
 splotter = plotter.ScreenPlotter([green], max_value=3000, min_value=0, top_space=10)
 
