@@ -44,7 +44,7 @@ class ScreenPlotter:
 
         self.tile_grid = displayio.TileGrid(self.bitmap, pixel_shader=self.palette, y=self.top_offset)
 
-        self.group = displayio.Group(max_size=12)
+        self.group = displayio.Group()
 
         self.group.append(self.tile_grid)
 
