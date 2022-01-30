@@ -30,7 +30,7 @@ import displayio, terminalio
 from adafruit_display_text import label
 
 # Make the display context
-splash = displayio.Group(max_size=10)
+splash = displayio.Group()
 display.show(splash)
 
 color_bitmap = displayio.Bitmap(160, 80, 1)
