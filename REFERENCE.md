@@ -8,18 +8,18 @@
     - [Final steps](#final-steps)
     - [Troubleshooting](#troubleshooting)
   - [Examples](#examples)
-    - [bme280-simple](#bme280-simple)
+    - [bme280_simple](#bme280_simple)
     - [screen](#screen)
-    - [gas-sensor](#gas-sensor)
+    - [gas_sensor](#gas_sensor)
     - [microphone](#microphone)
-    - [particulate-sensor](#particulate-sensor)
-    - [proximity-and-light](#proximity-and-light)
-    - [plotter-bme280](#plotter-bme280)
-    - [plotter-gas](#plotter-gas)
-    - [plotter-light&sound](#plotter-lightsound)
-    - [plotter-particulate](#plotter-particulate)
-    - [plotters-combined](#plotters-combined)
-    - [test-all](#test-all)
+    - [particulate_sensor](#particulate_sensor)
+    - [proximity_and_light](#proximity_and_light)
+    - [plotter_bme280](#plotter_bme280)
+    - [plotter_gas](#plotter_gas)
+    - [plotter_light_and_sound](#plotter_lightsound)
+    - [plotter_particulate](#plotter_particulate)
+    - [plotters_combined](#plotters_combined)
+    - [test_all](#test_all)
 - [Function Reference](#function-reference)
   - [Sensors](#sensors)
     - [BME280 temperature, pressure, and humidity sensor](#bme280-temperature-pressure-and-humidity-sensor)
@@ -74,7 +74,7 @@ Things to check:
 
 ### Examples
 
-#### bme280-simple
+#### bme280_simple
 [bme280_simple.py](examples/bme280_simple.py)
 
 Prints out the readings from the BME280 temperature, pressure, and humidity sensor, along with its estimated altitude calculation.
@@ -84,7 +84,7 @@ Prints out the readings from the BME280 temperature, pressure, and humidity sens
 
 Example of how to draw to the 0.96" LCD, using displayio.
 
-#### gas-sensor
+#### gas_sensor
 [gas_sensor.py](examples/gas_sensor.py)
 
 Prints the readings from the MiCS6814 analog gas sensor once a second.
@@ -96,34 +96,34 @@ Continuously waits for a double clap and prints when it hears one.
 
 Perfect for hacking! Just change the code in `double_clap_function` to whatever you want; toggle an LED, show something on screen, etc.
 
-#### particulate-sensor
+#### particulate_sensor
 [particulate_sensor.py](examples/particulate_sensor.py)
 
 Prints the readings from the PMS5003 particulate matter sensor as fast as it supplies them (typically around once per second).
 
 Remember to plug the PMS5003 particulate matter sensor into the socket on the underside of the FeatherWing!
 
-#### proximity-and-light
+#### proximity_and_light
 [proximity_and_light.py](examples/proximity_and_light.py)
 
 Quickly prints out the readings from the LTR-559 proximity and light sensor, and adjusts the screen's backlight according to the ambient light level readings.
 
-#### plotter-bme280
+#### plotter_bme280
 [plotter_bme280.py](examples/plotter_bme280.py)
 
 Draws a line graph of readings from the BME280 temperature, pressure and humidity sensor on the screen.
 
-#### plotter-gas
+#### plotter_gas
 [plotter_gas.py](examples/plotter_gas.py)
 
 Draws a line graph of readings from the MiCS6814 analog gas sensor on the screen.
 
-#### plotter-light&sound
+#### plotter_light_and_sound
 [plotter_light_and_sound.py](examples/plotter_light_and_sound.py)
 
 Draws a line graph of readings from the LTR-559 light and proximity sensor, and the noise level (determined from microphone readings) on the screen.
 
-#### plotter-particulate
+#### plotter_particulate
 [plotter_particulate.py](examples/plotter_particulate.py)
 
 Draws a line graph of readings from the PMS5003 particulate matter sensor on the screen.
@@ -136,7 +136,7 @@ PM1.0 readings are not shown by default as there is no standard to compare to at
 
 Remember to plug the PMS5003 particulate matter sensor into the socket on the underside of the FeatherWing!
 
-#### plotters-combined
+#### plotters_combined
 [plotters_combined.py](examples/plotters_combined.py)
 
 Combines all of the separate plotter examples into one!
@@ -145,7 +145,7 @@ You can switch page by waving your hand over the proximity sensor for one second
 
 If the particulate matter sensor isn't plugged in, it'll just skip it and still work.
 
-#### test-all
+#### test_all
 [test_all.py](examples/test_all.py)
 
 Runs a full self-test.
